@@ -370,6 +370,22 @@
 <script>
 // ---- Bootstrap ----
 let S = { settings:{}, orders:[], poll:{}, subscriptions:0 };
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
+  if (diff <= 0) return 'Today';
+  if (diff === 1) return 'Yesterday';
+  if (diff < 7) return `${diff} days ago`;
+  const w = Math.floor(diff / 7), d = diff % 7;
+  if (diff < 30) {
+    const ws = w === 1 ? 'a week' : `${w} weeks`;
+    return d === 0 ? `${ws} ago` : `${ws} and ${d} day${d > 1 ? 's' : ''} ago`;
+  }
+  const m = Math.floor(diff / 30), rd = diff % 30;
+  const ms = m === 1 ? 'a month' : `${m} months`;
+  return rd === 0 ? `${ms} ago` : `${ms} ago`;
+}
 const $ = id => document.getElementById(id);
 
 function toast(msg, err) {
@@ -488,12 +504,18 @@ function renderOrders() {
       return `${li.quantity}x ${li.name} <span style="color:var(--mint);font-weight:700">$${lineTotal}</span>`;
     }).join(' &nbsp;·&nbsp; ');
 
+    // Status pill — skip "staged" and "received" (internal states, not user-facing)
+    const showPill = !['staged','received'].includes(st);
+    // Relative date
+    const dateStr = o.order?.createdAt || o.createdAt;
+    const dateLabel = timeAgo(dateStr);
+
     return `<div class="order${needsBox ? ' order-warn' : ''}">
       <div class="row">
         <h4>
           <svg viewBox="0 0 24 24" style="color:var(--mint)"><path d="M3 7h13v10H3z"/><path d="M16 10h4l1 3v4h-5z"/><circle cx="7" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg>
           Order #${o.number}
-          <span class="pill s-${st}">${st.replace(/_/g,' ')}</span>
+          ${showPill ? `<span class="pill s-${st}">${st.replace(/_/g,' ')}</span>` : ''}
           ${o.isNew ? '<span class="pill s-new">New</span>' : ''}
           ${o.isSimulated ? '<span class="pill s-sim">Simulated</span>' : ''}
         </h4>
@@ -503,6 +525,7 @@ function renderOrders() {
           : rate ? `<span class="meta" style="margin:0">~${rate}</span>` : ''}
         ${orderTotal ? `<b style="color:#e2e8f0">${orderTotal}</b>` : ''}
       </div>
+      ${dateLabel ? `<div style="font-size:13px;font-weight:600;color:var(--mut);margin:4px 0 0">${dateLabel}</div>` : ''}
 
       <!-- Product name -->
       <div style="font-size:14px;font-weight:600;margin:8px 0 2px;color:var(--ink)">${products || 'No items'}</div>
