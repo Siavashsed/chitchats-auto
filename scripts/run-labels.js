@@ -116,9 +116,10 @@ async function main() {
     console.log(`  Package: ${pkg.boxName}, ${pkg.weight}g, ${pkg.size_x}x${pkg.size_y}x${pkg.size_z}cm`);
 
     if (pkg.needsBoxSize) {
-      console.log(`  SKIPPED: ${pkg.totalQty} items — open dashboard to enter box size and buy manually.`);
-      results.push({ ok: false, number: order.number, name: order.shipping.name, error: `${pkg.totalQty} items — open dashboard to set box size` });
-      continue;
+      const msg = `Order #${order.number} (${order.shipping.name}): ${pkg.totalQty} items — open dashboard to enter parcel size and buy manually`;
+      console.log(`  SKIPPED: ${pkg.totalQty} items — open dashboard to set parcel size`);
+      console.log(`::warning::${msg}`);
+      continue; // not a failure — expected, dashboard handles it
     }
     console.log(`  Items: ${pkg.summary}`);
 
@@ -155,8 +156,10 @@ async function main() {
 
       results.push({ ok: true, number: order.number, name: order.shipping.name, city: order.shipping.city, tracking, cost, pkg, labelBuf, ext });
     } catch (e) {
+      const msg = `Order #${order.number} (${order.shipping.name}): ${e.message}`;
       console.error(`  ERROR: ${e.message}`);
-      results.push({ ok: false, number: order.number, error: e.message });
+      console.log(`::error::${msg}`);
+      results.push({ ok: false, number: order.number, name: order.shipping.name, error: e.message });
     }
   }
 

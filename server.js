@@ -5,6 +5,15 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
+// Load .env file if present (key=value, one per line, # comments ignored)
+const envFile = path.join(__dirname, '.env');
+if (fs.existsSync(envFile)) {
+  fs.readFileSync(envFile, 'utf8').split('\n').forEach(line => {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+  });
+}
+
 const store = require('./lib/store');
 const woo = require('./lib/woo');
 const pipeline = require('./lib/pipeline');
@@ -308,7 +317,46 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+// Bootstrap settings from environment variables (reads .env too).
+// Only fills in values that are still blank so manual dashboard edits are never overwritten.
+function bootstrapSettings() {
+  const s = store.getSettings();
+  const patch = {};
+  const e = process.env;
+
+  if (e.CC_CLIENT_ID && !s.chitchats.clientId)
+    patch.chitchats = { ...s.chitchats, clientId: e.CC_CLIENT_ID };
+  if (e.CC_ACCESS_TOKEN && !s.chitchats.accessToken)
+    patch.chitchats = { ...(patch.chitchats || s.chitchats), accessToken: e.CC_ACCESS_TOKEN };
+  if (e.CC_ENV && s.environment !== e.CC_ENV)
+    patch.environment = e.CC_ENV;
+
+  if (e.WOO_KEY && !s.woo.consumerKey)
+    patch.woo = { ...s.woo, consumerKey: e.WOO_KEY };
+  if (e.WOO_SECRET && !s.woo.consumerSecret)
+    patch.woo = { ...(patch.woo || s.woo), consumerSecret: e.WOO_SECRET };
+  if (e.WOO_URL && s.woo.url !== e.WOO_URL)
+    patch.woo = { ...(patch.woo || s.woo), url: e.WOO_URL };
+
+  if (e.BREVO_KEY && !s.delivery.brevo.apiKey)
+    patch.delivery = { ...s.delivery, brevo: { ...s.delivery.brevo, apiKey: e.BREVO_KEY, enabled: true } };
+  if (e.BREVO_TO) patch.delivery = { ...(patch.delivery || s.delivery), brevo: { ...((patch.delivery || s.delivery).brevo), to: e.BREVO_TO } };
+
+  if (e.RETURN_ADDRESS) {
+    try {
+      const ra = JSON.parse(e.RETURN_ADDRESS);
+      if (!s.returnAddress.address_1) patch.returnAddress = { ...s.returnAddress, ...ra };
+    } catch {}
+  }
+
+  if (Object.keys(patch).length) {
+    store.saveSettings(patch);
+    console.log('  Settings bootstrapped from environment variables.');
+  }
+}
+
 server.listen(PORT, () => {
+  bootstrapSettings();
   const s = store.getSettings();
   const keys = vapid.loadKeys(); // ensure keys exist on startup
   console.log(`\n  ChitChats Auto  ->  http://localhost:${PORT}`);
