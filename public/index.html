@@ -177,6 +177,7 @@
     <button data-tab="orders" class="on">Orders</button>
     <button data-tab="packages">Packages</button>
     <button data-tab="settings">Settings</button>
+    <button data-tab="loadtest">Load Test</button>
   </div>
 
   <!-- ORDERS TAB -->
@@ -310,6 +311,56 @@
     <button class="btn primary" onclick="saveSettings()">
       <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Save settings
     </button>
+  </section>
+
+  <!-- Load Test tab -->
+  <section id="tab-loadtest" style="display:none">
+    <h3 style="margin:0 0 16px;font-size:16px">Load Test</h3>
+    <p style="color:var(--mut);font-size:13px;margin:0 0 18px">Creates real WooCommerce orders at a set rate so you can test push notifications and the label pipeline end-to-end.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+      <div>
+        <label class="f">Number of orders</label>
+        <input id="lt_count" type="number" min="1" max="500" value="50" style="padding:10px 12px">
+      </div>
+      <div>
+        <label class="f">Rate</label>
+        <select id="lt_mode" style="padding:10px 12px;width:100%" onchange="ltModeChange()">
+          <option value="rate">Orders per minute</option>
+          <option value="persec">As fast as possible (1/sec)</option>
+          <option value="random2h">Spread randomly over 2 hours</option>
+        </select>
+      </div>
+      <div id="lt_rpm_wrap">
+        <label class="f">Orders per minute</label>
+        <input id="lt_rpm" type="number" min="1" max="60" value="4" style="padding:10px 12px">
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom:18px">
+      <button class="btn primary" id="lt_start" onclick="ltStart()">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>Start
+      </button>
+      <button class="btn ghost" id="lt_stop" onclick="ltStop()" style="display:none">
+        <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Stop
+      </button>
+      <button class="btn" style="background:#7f1d1d;color:#fca5a5;margin-left:auto" onclick="ltClear()">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Delete all fake orders
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div id="lt_progress" style="display:none;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:18px">
+      <div class="row" style="margin-bottom:10px">
+        <span id="lt_label" style="font-weight:700;font-size:14px">Creating orders...</span>
+        <div class="grow"></div>
+        <span id="lt_count_display" style="font-size:13px;color:var(--mut)"></span>
+      </div>
+      <div style="height:6px;background:var(--line);border-radius:3px;overflow:hidden">
+        <div id="lt_bar" style="height:100%;background:var(--mint);width:0%;transition:width .3s;border-radius:3px"></div>
+      </div>
+      <div id="lt_failed_msg" style="font-size:12px;color:#f87171;margin-top:6px;display:none"></div>
+    </div>
   </section>
 
   <footer>Powered By Nexus V22 &middot; Kavalsia Inc. &middot; Siavash Sadighi</footer>
@@ -610,8 +661,74 @@ async function savePollHour() {
 // ---- Tabs ----
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
   document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x===b));
-  ['orders','packages','settings'].forEach(t => $('tab-'+t).style.display = t===b.dataset.tab ? '' : 'none');
+  ['orders','packages','settings','loadtest'].forEach(t => $('tab-'+t).style.display = t===b.dataset.tab ? '' : 'none');
+  if (b.dataset.tab === 'loadtest') ltPoll();
 });
+
+// ---- Load Test ----
+let _ltPollTimer = null;
+function ltModeChange() {
+  $('lt_rpm_wrap').style.display = $('lt_mode').value === 'rate' ? '' : 'none';
+}
+async function ltStart() {
+  const count = parseInt($('lt_count').value) || 50;
+  const mode  = $('lt_mode').value;
+  const ordersPerMin = parseInt($('lt_rpm')?.value) || 4;
+  try {
+    await api('/api/loadtest/start', { count, mode, ordersPerMin });
+    ltShowProgress();
+    toast(`Started: ${count} orders`);
+    ltPoll();
+  } catch(e) { toast(e.message, 1); }
+}
+async function ltStop() {
+  await api('/api/loadtest/stop', {});
+  toast('Stopped');
+  ltPoll();
+}
+async function ltClear() {
+  if (!confirm('Delete ALL fake/loadtest orders from WooCommerce and the dashboard?')) return;
+  toast('Deleting...');
+  try {
+    const r = await api('/api/loadtest/clear', {});
+    await load();
+    toast(`Deleted ${r.deleted} orders`);
+    ltHideProgress();
+  } catch(e) { toast(e.message, 1); }
+}
+function ltShowProgress() {
+  $('lt_progress').style.display = '';
+  $('lt_start').style.display = 'none';
+  $('lt_stop').style.display = '';
+}
+function ltHideProgress() {
+  $('lt_progress').style.display = 'none';
+  $('lt_start').style.display = '';
+  $('lt_stop').style.display = 'none';
+}
+async function ltPoll() {
+  clearTimeout(_ltPollTimer);
+  try {
+    const s = await fetch('/api/loadtest/status').then(r => r.json());
+    if (s.running || s.total > 0) {
+      $('lt_progress').style.display = '';
+      const pct = s.total ? Math.round((s.created + s.failed) / s.total * 100) : 0;
+      $('lt_bar').style.width = pct + '%';
+      $('lt_count_display').textContent = `${s.created + s.failed} / ${s.total}`;
+      $('lt_label').textContent = s.running ? 'Creating orders...' : `Done — ${s.created} created`;
+      if (s.failed > 0) { $('lt_failed_msg').style.display = ''; $('lt_failed_msg').textContent = `${s.failed} failed`; }
+      if (s.running) {
+        $('lt_start').style.display = 'none';
+        $('lt_stop').style.display = '';
+        _ltPollTimer = setTimeout(ltPoll, 2000);
+      } else {
+        $('lt_start').style.display = '';
+        $('lt_stop').style.display = 'none';
+        await load(); // refresh order list
+      }
+    }
+  } catch {}
+}
 
 // ---- Push notifications ----
 let _pushSub = null;

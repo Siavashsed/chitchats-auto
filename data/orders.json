@@ -1,5 +1,1540 @@
 [
   {
+    "orderId": 21683,
+    "number": "21683",
+    "order": {
+      "orderId": 21683,
+      "number": "21683",
+      "status": "on-hold",
+      "createdAt": "2020-07-01T14:49:59",
+      "value": 59.9,
+      "currency": "usd",
+      "description": "PocketBagX",
+      "customerEmail": "wilfreddouglaspeko@gmail.com",
+      "shipping": {
+        "name": "Wilfred Peko",
+        "address_1": "Waigani",
+        "address_2": "",
+        "city": "Port Moresby",
+        "province_code": "NATIONAL CAPITAL DISTRICT",
+        "postal_code": "121",
+        "country_code": "PG",
+        "phone": "72134800",
+        "email": "wilfreddouglaspeko@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "PocketBagX",
+          "sku": "",
+          "quantity": 2,
+          "price": 29.95,
+          "productId": 0
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "2 items stacked (24x21x22)",
+      "package_type": "parcel",
+      "weight": 1150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 22,
+      "description": "Scented candles (home decor)",
+      "totalQty": 2,
+      "summary": "2x PocketBagX",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 2x PocketBagX"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.832Z",
+    "updatedAt": "2026-06-18T21:35:53.832Z"
+  },
+  {
+    "orderId": 23753,
+    "number": "23753",
+    "order": {
+      "orderId": 23753,
+      "number": "23753",
+      "status": "on-hold",
+      "createdAt": "2020-07-20T17:48:05",
+      "value": 29.95,
+      "currency": "usd",
+      "description": "PatchLeggingX - Gray, M",
+      "customerEmail": "marnibasist@yahoo.com.au",
+      "shipping": {
+        "name": "Marni  Basist",
+        "address_1": "5/135 Booran Road",
+        "address_2": "",
+        "city": "Caulfield South",
+        "province_code": "VIC",
+        "postal_code": "3162",
+        "country_code": "AU",
+        "phone": "",
+        "email": "marnibasist@yahoo.com.au"
+      },
+      "lineItems": [
+        {
+          "name": "PatchLeggingX - Gray, M",
+          "sku": "",
+          "quantity": 1,
+          "price": 29.95,
+          "productId": 0
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x PatchLeggingX - Gray, M",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x PatchLeggingX - Gray, M"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.831Z",
+    "updatedAt": "2026-06-18T21:35:53.831Z"
+  },
+  {
+    "orderId": 23803,
+    "number": "23803",
+    "order": {
+      "orderId": 23803,
+      "number": "23803",
+      "status": "on-hold",
+      "createdAt": "2020-07-24T07:29:42",
+      "value": 24.95,
+      "currency": "usd",
+      "description": "PocketBagX",
+      "customerEmail": "amindj99@gmail.com",
+      "shipping": {
+        "name": "Amin  Dholajiwala",
+        "address_1": "2/F 3rd Floor rose residency , kharawala dehla , panchpipli , jamalpur",
+        "address_2": "",
+        "city": "ahmedabad",
+        "province_code": "GUJARAT",
+        "postal_code": "380001",
+        "country_code": "IN",
+        "phone": "9725438423",
+        "email": "amindj99@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "PocketBagX",
+          "sku": "",
+          "quantity": 1,
+          "price": 24.95,
+          "productId": 0
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x PocketBagX",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x PocketBagX"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.830Z",
+    "updatedAt": "2026-06-18T21:35:53.830Z"
+  },
+  {
+    "orderId": 25872,
+    "number": "25872",
+    "order": {
+      "orderId": 25872,
+      "number": "25872",
+      "status": "on-hold",
+      "createdAt": "2020-08-30T20:23:15",
+      "value": 34.54,
+      "currency": "usd",
+      "description": "Personal Pocket Bag - wine red right",
+      "customerEmail": "jaygoodwin1972@gmail.com",
+      "shipping": {
+        "name": "Jason  Goodwin",
+        "address_1": "837 Quartet Avenue",
+        "address_2": "",
+        "city": "Ottawa",
+        "province_code": "ON",
+        "postal_code": "K1X 0C7",
+        "country_code": "CA",
+        "phone": "(613) 248-5265",
+        "email": "jaygoodwin1972@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Personal Pocket Bag - wine red right",
+          "sku": "",
+          "quantity": 1,
+          "price": 29.95,
+          "productId": 0
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Personal Pocket Bag - wine red right",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Personal Pocket Bag - wine red right"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.828Z",
+    "updatedAt": "2026-06-18T21:35:53.828Z"
+  },
+  {
+    "orderId": 25873,
+    "number": "25873",
+    "order": {
+      "orderId": 25873,
+      "number": "25873",
+      "status": "on-hold",
+      "createdAt": "2020-08-30T21:11:08",
+      "value": 34.54,
+      "currency": "usd",
+      "description": "Personal Pocket Bag - Gray right shoulder",
+      "customerEmail": "chillingyeti@gmail.com",
+      "shipping": {
+        "name": "Bianca Chan",
+        "address_1": "PO BOX 99900 EP 447 583",
+        "address_2": "",
+        "city": "Burnaby",
+        "province_code": "BC",
+        "postal_code": "V5E 0B7",
+        "country_code": "CA",
+        "phone": "",
+        "email": "chillingyeti@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Personal Pocket Bag - Gray right shoulder",
+          "sku": "",
+          "quantity": 1,
+          "price": 29.95,
+          "productId": 0
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Personal Pocket Bag - Gray right shoulder",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Personal Pocket Bag - Gray right shoulder"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.827Z",
+    "updatedAt": "2026-06-18T21:35:53.827Z"
+  },
+  {
+    "orderId": 25874,
+    "number": "25874",
+    "order": {
+      "orderId": 25874,
+      "number": "25874",
+      "status": "on-hold",
+      "createdAt": "2020-08-31T11:32:20",
+      "value": 34.54,
+      "currency": "usd",
+      "description": "Personal Pocket Bag - Gray right shoulder",
+      "customerEmail": "dheerding@yahoo.com",
+      "shipping": {
+        "name": "Heerding Dan",
+        "address_1": "101 la salle",
+        "address_2": "",
+        "city": "Clovis",
+        "province_code": "NM",
+        "postal_code": "88101",
+        "country_code": "US",
+        "phone": "",
+        "email": "dheerding@yahoo.com"
+      },
+      "lineItems": [
+        {
+          "name": "Personal Pocket Bag - Gray right shoulder",
+          "sku": "",
+          "quantity": 1,
+          "price": 29.95,
+          "productId": 0
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Personal Pocket Bag - Gray right shoulder",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Personal Pocket Bag - Gray right shoulder"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.827Z",
+    "updatedAt": "2026-06-18T21:35:53.827Z"
+  },
+  {
+    "orderId": 27280,
+    "number": "27280",
+    "order": {
+      "orderId": 27280,
+      "number": "27280",
+      "status": "on-hold",
+      "createdAt": "2020-12-13T00:08:04",
+      "value": 157.64,
+      "currency": "usd",
+      "description": "Dalmend Candle - White, Dalmend Candle - Brown",
+      "customerEmail": "eilishcashubec@live.ca",
+      "shipping": {
+        "name": "Eilish Cashubec",
+        "address_1": "220 Herbert street",
+        "address_2": "",
+        "city": "Waterloo",
+        "province_code": "ON",
+        "postal_code": "N2J 1T9",
+        "country_code": "CA",
+        "phone": "6476491123",
+        "email": "eilishcashubec@live.ca"
+      },
+      "lineItems": [
+        {
+          "name": "Dalmend Candle - White",
+          "sku": "",
+          "quantity": 1,
+          "price": 46.5,
+          "productId": 0
+        },
+        {
+          "name": "Dalmend Candle - Brown",
+          "sku": "",
+          "quantity": 2,
+          "price": 46.5,
+          "productId": 0
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "3 items — box size needed",
+      "package_type": "parcel",
+      "weight": 1650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 0,
+      "size_y": 0,
+      "size_z": 0,
+      "description": "Scented candles (home decor)",
+      "totalQty": 3,
+      "summary": "1x Dalmend Candle - White, 2x Dalmend Candle - Brown",
+      "needsBoxSize": true
+    },
+    "status": "needs_box_size",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Dalmend Candle - White, 2x Dalmend Candle - Brown"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.826Z",
+    "updatedAt": "2026-06-18T21:35:53.826Z"
+  },
+  {
+    "orderId": 30502,
+    "number": "30502",
+    "order": {
+      "orderId": 30502,
+      "number": "30502",
+      "status": "on-hold",
+      "createdAt": "2021-06-20T19:43:44",
+      "value": 79.1,
+      "currency": "usd",
+      "description": "CONCTRAY, Vash Candle - No Color",
+      "customerEmail": "keesderidder@gmail.com",
+      "shipping": {
+        "name": "Kees de Ridder",
+        "address_1": "1106 - 450 8th Ave SE",
+        "address_2": "",
+        "city": "Calgary",
+        "province_code": "AB",
+        "postal_code": "T2G 1T2",
+        "country_code": "CA",
+        "phone": "4034022519",
+        "email": "keesderidder@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "CONCTRAY",
+          "sku": "",
+          "quantity": 1,
+          "price": 25,
+          "productId": 29570
+        },
+        {
+          "name": "Vash Candle - No Color",
+          "sku": "16MB00E-DLMND",
+          "quantity": 1,
+          "price": 45,
+          "productId": 30404
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "2 items stacked (24x21x22)",
+      "package_type": "parcel",
+      "weight": 1150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 22,
+      "description": "Scented candles (home decor)",
+      "totalQty": 2,
+      "summary": "1x CONCTRAY, 1x Vash Candle - No Color",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x CONCTRAY, 1x Vash Candle - No Color"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.824Z",
+    "updatedAt": "2026-06-18T21:35:53.824Z"
+  },
+  {
+    "orderId": 32793,
+    "number": "32793",
+    "order": {
+      "orderId": 32793,
+      "number": "32793",
+      "status": "on-hold",
+      "createdAt": "2022-07-20T12:07:59",
+      "value": 50.85,
+      "currency": "cad",
+      "description": "Canney Candle",
+      "customerEmail": "karen.garbig@gmail.com",
+      "shipping": {
+        "name": "Karen Garbig",
+        "address_1": "54 Killamarsh drive",
+        "address_2": "",
+        "city": "Toronto",
+        "province_code": "ON",
+        "postal_code": "M3J 1J3",
+        "country_code": "CA",
+        "phone": "(416) 728-0969",
+        "email": "karen.garbig@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Canney Candle",
+          "sku": "72115778-1-1-2",
+          "quantity": 1,
+          "price": 45,
+          "productId": 30365
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Canney Candle",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Canney Candle"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.820Z",
+    "updatedAt": "2026-06-18T21:35:53.820Z"
+  },
+  {
+    "orderId": 33302,
+    "number": "33302",
+    "order": {
+      "orderId": 33302,
+      "number": "33302",
+      "status": "on-hold",
+      "createdAt": "2022-11-28T09:44:31",
+      "value": 39.55,
+      "currency": "cad",
+      "description": "Canney",
+      "customerEmail": "adamo.carlone@hotmail.com",
+      "shipping": {
+        "name": "Adamo Carlone",
+        "address_1": "2262 RUE DE MONTE CARLO",
+        "address_2": "-",
+        "city": "LAVAL",
+        "province_code": "QC",
+        "postal_code": "H7K 3V7",
+        "country_code": "CA",
+        "phone": "5146540690",
+        "email": "adamo.carlone@hotmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 1,
+          "price": 35,
+          "productId": 30365
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Canney",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Canney"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.819Z",
+    "updatedAt": "2026-06-18T21:35:53.819Z"
+  },
+  {
+    "orderId": 33303,
+    "number": "33303",
+    "order": {
+      "orderId": 33303,
+      "number": "33303",
+      "status": "on-hold",
+      "createdAt": "2022-11-28T16:16:30",
+      "value": 197.52,
+      "currency": "usd",
+      "description": "Canney, Vish",
+      "customerEmail": "bbrartholomew@gmail.com",
+      "shipping": {
+        "name": "Bryce Bartholomew",
+        "address_1": "401 Sipple St",
+        "address_2": "",
+        "city": "Oceanside",
+        "province_code": "CA",
+        "postal_code": "92058",
+        "country_code": "US",
+        "phone": "4022766201",
+        "email": "bbrartholomew@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 2,
+          "price": 31.2,
+          "productId": 30365
+        },
+        {
+          "name": "Vish",
+          "sku": "72115778-1-2",
+          "quantity": 2,
+          "price": 56.2,
+          "productId": 30401
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "4 items — box size needed",
+      "package_type": "parcel",
+      "weight": 2150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 0,
+      "size_y": 0,
+      "size_z": 0,
+      "description": "Scented candles (home decor)",
+      "totalQty": 4,
+      "summary": "2x Canney, 2x Vish",
+      "needsBoxSize": true
+    },
+    "status": "needs_box_size",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 2x Canney, 2x Vish"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.818Z",
+    "updatedAt": "2026-06-18T21:35:53.818Z"
+  },
+  {
+    "orderId": 33311,
+    "number": "33311",
+    "order": {
+      "orderId": 33311,
+      "number": "33311",
+      "status": "on-hold",
+      "createdAt": "2022-11-28T21:29:15",
+      "value": 67.8,
+      "currency": "cad",
+      "description": "Vish",
+      "customerEmail": "heythere-slowdown@outlook.com",
+      "shipping": {
+        "name": "Tristan Aus",
+        "address_1": "4 Heathdale Rd",
+        "address_2": "",
+        "city": "Toronto",
+        "province_code": "ON",
+        "postal_code": "M6C 1M6",
+        "country_code": "CA",
+        "phone": "4372156371",
+        "email": "heythere-slowdown@outlook.com"
+      },
+      "lineItems": [
+        {
+          "name": "Vish",
+          "sku": "72115778-1-2",
+          "quantity": 1,
+          "price": 60,
+          "productId": 30401
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Vish",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Vish"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.816Z",
+    "updatedAt": "2026-06-18T21:35:53.816Z"
+  },
+  {
+    "orderId": 33317,
+    "number": "33317",
+    "order": {
+      "orderId": 33317,
+      "number": "33317",
+      "status": "on-hold",
+      "createdAt": "2022-11-29T19:59:27",
+      "value": 98.99,
+      "currency": "cad",
+      "description": "Natali, Vish",
+      "customerEmail": "annieroy3129@gmail.com",
+      "shipping": {
+        "name": "Annie Roy",
+        "address_1": "7900 Bathurst St",
+        "address_2": "218",
+        "city": "Thornhill",
+        "province_code": "ON",
+        "postal_code": "L4J 0J9",
+        "country_code": "CA",
+        "phone": "(647) 885-3129",
+        "email": "annieroy3129@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Natali",
+          "sku": "72115778-1-1-2-1-1-2",
+          "quantity": 2,
+          "price": 14.2,
+          "productId": 32022
+        },
+        {
+          "name": "Vish",
+          "sku": "72115778-1-2",
+          "quantity": 1,
+          "price": 59.2,
+          "productId": 30401
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "3 items — box size needed",
+      "package_type": "parcel",
+      "weight": 1650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 0,
+      "size_y": 0,
+      "size_z": 0,
+      "description": "Scented candles (home decor)",
+      "totalQty": 3,
+      "summary": "2x Natali, 1x Vish",
+      "needsBoxSize": true
+    },
+    "status": "needs_box_size",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 2x Natali, 1x Vish"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.816Z",
+    "updatedAt": "2026-06-18T21:35:53.816Z"
+  },
+  {
+    "orderId": 33324,
+    "number": "33324",
+    "order": {
+      "orderId": 33324,
+      "number": "33324",
+      "status": "on-hold",
+      "createdAt": "2022-12-01T07:42:37",
+      "value": 59.66,
+      "currency": "cad",
+      "description": "Natali",
+      "customerEmail": "suzannepack@hotmail.com",
+      "shipping": {
+        "name": "suzanne Pack",
+        "address_1": "1281A Wellington street west",
+        "address_2": "",
+        "city": "Ottawa",
+        "province_code": "ON",
+        "postal_code": "K1Y 3A8",
+        "country_code": "CA",
+        "phone": "6138993480",
+        "email": "suzannepack@hotmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Natali",
+          "sku": "72115778-1-1-2-1-1-2",
+          "quantity": 4,
+          "price": 13.2,
+          "productId": 32022
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "4 items — box size needed",
+      "package_type": "parcel",
+      "weight": 2150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 0,
+      "size_y": 0,
+      "size_z": 0,
+      "description": "Scented candles (home decor)",
+      "totalQty": 4,
+      "summary": "4x Natali",
+      "needsBoxSize": true
+    },
+    "status": "needs_box_size",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 4x Natali"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.815Z",
+    "updatedAt": "2026-06-18T21:35:53.815Z"
+  },
+  {
+    "orderId": 33325,
+    "number": "33325",
+    "order": {
+      "orderId": 33325,
+      "number": "33325",
+      "status": "on-hold",
+      "createdAt": "2022-12-01T20:23:15",
+      "value": 39.55,
+      "currency": "cad",
+      "description": "Canney",
+      "customerEmail": "holly.greco87@gmail.com",
+      "shipping": {
+        "name": "holly Greco",
+        "address_1": "19 Brightbay Cres",
+        "address_2": "",
+        "city": "Toronto",
+        "province_code": "ON",
+        "postal_code": "L3T 1C2",
+        "country_code": "CA",
+        "phone": "4388810603",
+        "email": "holly.greco87@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 1,
+          "price": 35,
+          "productId": 30365
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Canney",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Canney"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.815Z",
+    "updatedAt": "2026-06-18T21:35:53.815Z"
+  },
+  {
+    "orderId": 33347,
+    "number": "33347",
+    "order": {
+      "orderId": 33347,
+      "number": "33347",
+      "status": "on-hold",
+      "createdAt": "2022-12-06T01:27:16",
+      "value": 72.77,
+      "currency": "cad",
+      "description": "Canney",
+      "customerEmail": "coraleisa@gmail.com",
+      "shipping": {
+        "name": "Corale Knowles",
+        "address_1": "2367 Begbie Terrace",
+        "address_2": "",
+        "city": "Port Coquitlam",
+        "province_code": "BC",
+        "postal_code": "V3C 5K7",
+        "country_code": "CA",
+        "phone": "7783208556",
+        "email": "coraleisa@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 2,
+          "price": 32.2,
+          "productId": 30365
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "2 items stacked (24x21x22)",
+      "package_type": "parcel",
+      "weight": 1150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 22,
+      "description": "Scented candles (home decor)",
+      "totalQty": 2,
+      "summary": "2x Canney",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 2x Canney"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.815Z",
+    "updatedAt": "2026-06-18T21:35:53.815Z"
+  },
+  {
+    "orderId": 33350,
+    "number": "33350",
+    "order": {
+      "orderId": 33350,
+      "number": "33350",
+      "status": "on-hold",
+      "createdAt": "2022-12-06T20:45:14",
+      "value": 72.77,
+      "currency": "cad",
+      "description": "Canney",
+      "customerEmail": "gr4phicsbyjules@gmail.com",
+      "shipping": {
+        "name": "Jules Siddall",
+        "address_1": "15 Berwick Court",
+        "address_2": "629",
+        "city": "Winnipeg",
+        "province_code": "MB",
+        "postal_code": "R3L 2J1",
+        "country_code": "CA",
+        "phone": "(431) 276-2716",
+        "email": "gr4phicsbyjules@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 2,
+          "price": 32.2,
+          "productId": 30365
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "2 items stacked (24x21x22)",
+      "package_type": "parcel",
+      "weight": 1150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 22,
+      "description": "Scented candles (home decor)",
+      "totalQty": 2,
+      "summary": "2x Canney",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 2x Canney"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.815Z",
+    "updatedAt": "2026-06-18T21:35:53.815Z"
+  },
+  {
+    "orderId": 33359,
+    "number": "33359",
+    "order": {
+      "orderId": 33359,
+      "number": "33359",
+      "status": "on-hold",
+      "createdAt": "2022-12-13T07:23:50",
+      "value": 106.79,
+      "currency": "cad",
+      "description": "Canney",
+      "customerEmail": "hilton.penny064@gmail.com",
+      "shipping": {
+        "name": "Penny Hilton",
+        "address_1": "56 Brookridge Dr",
+        "address_2": "",
+        "city": "Scarborough",
+        "province_code": "ON",
+        "postal_code": "M1P 3M5",
+        "country_code": "CA",
+        "phone": "4167590264",
+        "email": "hilton.penny064@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 3,
+          "price": 31.5,
+          "productId": 30365
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "3 items — box size needed",
+      "package_type": "parcel",
+      "weight": 1650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 0,
+      "size_y": 0,
+      "size_z": 0,
+      "description": "Scented candles (home decor)",
+      "totalQty": 3,
+      "summary": "3x Canney",
+      "needsBoxSize": true
+    },
+    "status": "needs_box_size",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 3x Canney"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.814Z",
+    "updatedAt": "2026-06-18T21:35:53.814Z"
+  },
+  {
+    "orderId": 33363,
+    "number": "33363",
+    "order": {
+      "orderId": 33363,
+      "number": "33363",
+      "status": "on-hold",
+      "createdAt": "2022-12-15T14:41:31",
+      "value": 124.75,
+      "currency": "cad",
+      "description": "Vish",
+      "customerEmail": "phaloupnorris@gmail.com",
+      "shipping": {
+        "name": "philippe norris",
+        "address_1": "635 Rue Robert",
+        "address_2": "",
+        "city": "Contrecoeur",
+        "province_code": "QC",
+        "postal_code": "J0L 1C0",
+        "country_code": "CA",
+        "phone": "(438) 490-5873",
+        "email": "phaloupnorris@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Vish",
+          "sku": "72115778-1-2",
+          "quantity": 2,
+          "price": 55.2,
+          "productId": 30401
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "2 items stacked (24x21x22)",
+      "package_type": "parcel",
+      "weight": 1150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 22,
+      "description": "Scented candles (home decor)",
+      "totalQty": 2,
+      "summary": "2x Vish",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 2x Vish"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.814Z",
+    "updatedAt": "2026-06-18T21:35:53.814Z"
+  },
+  {
+    "orderId": 33364,
+    "number": "33364",
+    "order": {
+      "orderId": 33364,
+      "number": "33364",
+      "status": "on-hold",
+      "createdAt": "2022-12-21T10:41:17",
+      "value": 152.02,
+      "currency": "usd",
+      "description": "Vish, Canney, Natali",
+      "customerEmail": "maxhildy@gmail.com",
+      "shipping": {
+        "name": "Aaron Hildebrand",
+        "address_1": "1025 hullview ave",
+        "address_2": "",
+        "city": "Norfolk",
+        "province_code": "VA",
+        "postal_code": "23503",
+        "country_code": "US",
+        "phone": "7578031090",
+        "email": "maxhildy@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Vish",
+          "sku": "72115778-1-2",
+          "quantity": 1,
+          "price": 60,
+          "productId": 30401
+        },
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 1,
+          "price": 35,
+          "productId": 30365
+        },
+        {
+          "name": "Natali",
+          "sku": "72115778-1-1-2-1-1-2",
+          "quantity": 1,
+          "price": 25,
+          "productId": 32022
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "3 items — box size needed",
+      "package_type": "parcel",
+      "weight": 1650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 0,
+      "size_y": 0,
+      "size_z": 0,
+      "description": "Scented candles (home decor)",
+      "totalQty": 3,
+      "summary": "1x Vish, 1x Canney, 1x Natali",
+      "needsBoxSize": true
+    },
+    "status": "needs_box_size",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Vish, 1x Canney, 1x Natali"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.813Z",
+    "updatedAt": "2026-06-18T21:35:53.813Z"
+  },
+  {
+    "orderId": 33366,
+    "number": "33366",
+    "order": {
+      "orderId": 33366,
+      "number": "33366",
+      "status": "on-hold",
+      "createdAt": "2022-12-21T14:56:55",
+      "value": 39.55,
+      "currency": "cad",
+      "description": "Canney",
+      "customerEmail": "melinda.woitzik@hotmail.com",
+      "shipping": {
+        "name": "melinda Woitzik",
+        "address_1": "254 senator street",
+        "address_2": "",
+        "city": "Pickering",
+        "province_code": "ON",
+        "postal_code": "L1V 6N2",
+        "country_code": "CA",
+        "phone": "4168312667",
+        "email": "melinda.woitzik@hotmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 1,
+          "price": 35,
+          "productId": 30365
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Canney",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Canney"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.813Z",
+    "updatedAt": "2026-06-18T21:35:53.813Z"
+  },
+  {
+    "orderId": 33367,
+    "number": "33367",
+    "order": {
+      "orderId": 33367,
+      "number": "33367",
+      "status": "on-hold",
+      "createdAt": "2022-12-27T16:24:28",
+      "value": 62.15,
+      "currency": "cad",
+      "description": "Natali, Vash",
+      "customerEmail": "ashley.gal.220@gmail.com",
+      "shipping": {
+        "name": "Ashley Neufeld",
+        "address_1": "215 Pinehouse Dr",
+        "address_2": "25",
+        "city": "Saskatoon",
+        "province_code": "SK",
+        "postal_code": "S7K 6N9",
+        "country_code": "CA",
+        "phone": "3064919705",
+        "email": "ashley.gal.220@gmail.com"
+      },
+      "lineItems": [
+        {
+          "name": "Natali",
+          "sku": "72115778-1-1-2-1-1-2",
+          "quantity": 1,
+          "price": 15,
+          "productId": 32022
+        },
+        {
+          "name": "Vash",
+          "sku": "16MB00E-DLMND",
+          "quantity": 1,
+          "price": 40,
+          "productId": 30404
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "2 items stacked (24x21x22)",
+      "package_type": "parcel",
+      "weight": 1150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 22,
+      "description": "Scented candles (home decor)",
+      "totalQty": 2,
+      "summary": "1x Natali, 1x Vash",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Natali, 1x Vash"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.812Z",
+    "updatedAt": "2026-06-18T21:35:53.812Z"
+  },
+  {
+    "orderId": 33372,
+    "number": "33372",
+    "order": {
+      "orderId": 33372,
+      "number": "33372",
+      "status": "on-hold",
+      "createdAt": "2023-04-11T19:43:05",
+      "value": 39.55,
+      "currency": "usd",
+      "description": "Canney",
+      "customerEmail": "troy@fullmoonwater.net",
+      "shipping": {
+        "name": "J. Troy Ann Krebs",
+        "address_1": "11901 Elkhead Range Road",
+        "address_2": "",
+        "city": "Littleton",
+        "province_code": "CO",
+        "postal_code": "80127",
+        "country_code": "US",
+        "phone": "+13039938242",
+        "email": "troy@fullmoonwater.net"
+      },
+      "lineItems": [
+        {
+          "name": "Canney",
+          "sku": "72115778-1-1-2",
+          "quantity": 1,
+          "price": 35,
+          "productId": 30365
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Canney",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Canney"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.812Z",
+    "updatedAt": "2026-06-18T21:35:53.812Z"
+  },
+  {
+    "orderId": 36744,
+    "number": "36744",
+    "order": {
+      "orderId": 36744,
+      "number": "36744",
+      "status": "processing",
+      "createdAt": "2026-06-18T13:45:27",
+      "value": 90,
+      "currency": "usd",
+      "description": "Grand Vish Candle",
+      "customerEmail": "dalton_zimmer@yahoo.com",
+      "shipping": {
+        "name": "Dalton Zimmer",
+        "address_1": "11295 California 9",
+        "address_2": "",
+        "city": "Brookdale",
+        "province_code": "CA",
+        "postal_code": "95007",
+        "country_code": "US",
+        "phone": "4087619721",
+        "email": "dalton_zimmer@yahoo.com"
+      },
+      "lineItems": [
+        {
+          "name": "Grand Vish Candle",
+          "sku": "72115778-1-2-2-1",
+          "quantity": 1,
+          "price": 90,
+          "productId": 35177
+        }
+      ]
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Grand Vish Candle",
+      "needsBoxSize": false
+    },
+    "status": "received",
+    "isNew": false,
+    "events": [
+      {
+        "at": "2026-06-18T21:35:53.807Z",
+        "message": "Synced from WooCommerce — 1x Grand Vish Candle"
+      }
+    ],
+    "createdAt": "2026-06-18T21:35:53.811Z",
+    "updatedAt": "2026-06-18T21:35:53.812Z"
+  },
+  {
+    "orderId": "POLL350496",
+    "number": "POLL350496",
+    "order": {
+      "orderId": "POLL350496",
+      "number": "POLL350496",
+      "status": "processing",
+      "createdAt": null,
+      "value": 39.5,
+      "currency": "cad",
+      "description": "Vish Body Candle",
+      "customerEmail": "sia@kavalsia.com",
+      "shipping": {
+        "name": "Poll Test",
+        "address_1": "123 Queen St W",
+        "address_2": "",
+        "city": "Toronto",
+        "province_code": "ON",
+        "postal_code": "M5H 2M9",
+        "country_code": "CA",
+        "phone": "",
+        "email": "sia@kavalsia.com"
+      },
+      "lineItems": [
+        {
+          "name": "Vish Body Candle",
+          "sku": "VISH",
+          "quantity": 1,
+          "price": 39.5
+        }
+      ],
+      "pkg": {
+        "boxName": "1 item (24x21x11)",
+        "package_type": "parcel",
+        "weight": 650,
+        "weight_unit": "g",
+        "size_unit": "cm",
+        "size_x": 24,
+        "size_y": 21,
+        "size_z": 11,
+        "description": "Scented candle (home decor)",
+        "totalQty": 1,
+        "summary": "1x Vish Body Candle",
+        "needsBoxSize": false
+      }
+    },
+    "pkg": {
+      "boxName": "1 item (24x21x11)",
+      "package_type": "parcel",
+      "weight": 650,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 11,
+      "description": "Scented candle (home decor)",
+      "totalQty": 1,
+      "summary": "1x Vish Body Candle",
+      "needsBoxSize": false
+    },
+    "status": "staged",
+    "mode": "stage",
+    "events": [
+      {
+        "at": "2026-06-18T21:32:30.496Z",
+        "message": "Order received - 1x Vish Body Candle -> 1 item (24x21x11) (650g)"
+      },
+      {
+        "at": "2026-06-18T21:32:30.497Z",
+        "message": "[MOCK] Shipment staged, cheapest 8.49 cad"
+      }
+    ],
+    "createdAt": "2026-06-18T21:32:30.497Z",
+    "updatedAt": "2026-06-18T21:32:30.497Z",
+    "shipmentId": "MOCK-POLL350496",
+    "rates": [
+      {
+        "postage_type": "chit_chats_canada_tracked",
+        "payment_amount": "8.49",
+        "payment_currency": "cad"
+      },
+      {
+        "postage_type": "usps_first",
+        "payment_amount": "12.10",
+        "payment_currency": "cad"
+      }
+    ],
+    "chosenRate": {
+      "postage_type": "chit_chats_canada_tracked",
+      "payment_amount": "8.49",
+      "payment_currency": "cad"
+    },
+    "isNew": false
+  },
+  {
     "orderId": "SIM143285",
     "number": "SIM143285",
     "order": {
@@ -90,6 +1625,7 @@
       "postage_type": "chit_chats_canada_tracked",
       "payment_amount": "8.49",
       "payment_currency": "cad"
-    }
+    },
+    "isNew": false
   }
 ]

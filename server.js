@@ -20,6 +20,7 @@ const pipeline = require('./lib/pipeline');
 const { LABELS } = require('./lib/deliver');
 const vapid = require('./lib/vapid');
 const poller = require('./lib/poller');
+const loadtest = require('./lib/loadtest');
 
 const PORT = process.env.PORT || 4605;
 const PUBLIC = path.join(__dirname, 'public');
@@ -226,6 +227,25 @@ const server = http.createServer(async (req, res) => {
         store.logEvent(id, `Shipment ${ship.id} created with manual box ${size_x}x${size_y}x${size_z}cm`);
       }
       return send(res, 200, { ok: true, order: store.getOrder(id) });
+    }
+
+    // ---- Loadtest API ----
+    if (req.method === 'POST' && pathname === '/api/loadtest/start') {
+      const { count, mode, ordersPerMin } = JSON.parse(body || '{}');
+      loadtest.start(store.getSettings(), { count: count||50, mode: mode||'rate', ordersPerMin: ordersPerMin||4 });
+      return send(res, 200, { ok: true, status: loadtest.getStatus() });
+    }
+    if (req.method === 'POST' && pathname === '/api/loadtest/stop') {
+      loadtest.stop();
+      return send(res, 200, { ok: true, status: loadtest.getStatus() });
+    }
+    if (req.method === 'GET' && pathname === '/api/loadtest/status') {
+      return send(res, 200, loadtest.getStatus());
+    }
+    if (req.method === 'POST' && pathname === '/api/loadtest/clear') {
+      loadtest.clearSimulated();
+      const result = await loadtest.clearAll(store.getSettings());
+      return send(res, 200, { ok: true, ...result });
     }
 
     // ---- API: sync all WooCommerce processing orders into store ----
