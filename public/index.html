@@ -193,9 +193,6 @@
     </div>
 
     <div class="row" style="margin-bottom:14px">
-      <button class="btn primary" onclick="simulate()">
-        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>Simulate order
-      </button>
       <button class="btn ghost" onclick="load()">
         <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh
       </button>
@@ -432,8 +429,13 @@ function renderOrders() {
       ? `https://chitchats.com/dashboard/shipments/${o.shipmentId}`
       : null;
 
-    // Products line: each item name + qty
-    const products = (o.order?.lineItems || []).map(li => `${li.quantity}x ${li.name}`).join(', ');
+    // Products line with per-item pricing
+    const cur = (o.order?.currency || 'cad').toUpperCase();
+    const orderTotal = o.order?.value ? `${cur} $${Number(o.order.value).toFixed(2)}` : '';
+    const products = (o.order?.lineItems || []).map(li => {
+      const lineTotal = (li.price * li.quantity).toFixed(2);
+      return `${li.quantity}x ${li.name} <span style="color:var(--mint);font-weight:700">$${lineTotal}</span>`;
+    }).join(' &nbsp;·&nbsp; ');
 
     return `<div class="order${needsBox ? ' order-warn' : ''}">
       <div class="row">
@@ -445,7 +447,10 @@ function renderOrders() {
           ${o.isSimulated ? '<span class="pill s-sim">Simulated</span>' : ''}
         </h4>
         <div class="grow"></div>
-        ${o.cost ? `<b style="color:var(--mint)">${o.cost}</b>` : rate ? `<span class="meta" style="margin:0">~${rate}</span>` : ''}
+        ${o.cost
+          ? `<b style="color:var(--mint)">${o.cost} <span style="font-size:11px;opacity:.6">shipping</span></b>`
+          : rate ? `<span class="meta" style="margin:0">~${rate}</span>` : ''}
+        ${orderTotal ? `<b style="color:#e2e8f0">${orderTotal}</b>` : ''}
       </div>
 
       <!-- Product name -->
