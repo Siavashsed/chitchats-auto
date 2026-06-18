@@ -82,6 +82,10 @@
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
   .order-warn{border-color:var(--amber)!important}
   .refund-form{margin-top:10px;background:#160505;border:1px solid #7f1d1d;border-radius:10px;padding:12px}
+  .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .fchip{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;transition:.15s}
+  .fchip:hover{border-color:var(--mint);color:var(--mint)}
+  .fchip.on{background:var(--mint);color:#000;border-color:var(--mint)}
   .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .events{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px;font-size:11.5px;color:var(--mut);max-height:0;overflow:hidden;transition:.2s}
   .events.open{max-height:300px;overflow:auto}
@@ -178,6 +182,16 @@
   <!-- ORDERS TAB -->
   <section id="tab-orders">
     <div class="stats" id="stats"></div>
+
+    <!-- Order status filter -->
+    <div class="filter-bar" id="filterBar">
+      <button class="fchip on" data-filter="processing" onclick="setFilter('processing')">Processing</button>
+      <button class="fchip" data-filter="all" onclick="setFilter('all')">All</button>
+      <button class="fchip" data-filter="refunded" onclick="setFilter('refunded')">Refunded</button>
+      <button class="fchip" data-filter="completed" onclick="setFilter('completed')">Completed</button>
+      <button class="fchip" data-filter="cancelled" onclick="setFilter('cancelled')">Cancelled</button>
+    </div>
+
     <div class="row" style="margin-bottom:14px">
       <button class="btn primary" onclick="simulate()">
         <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>Simulate order
@@ -383,20 +397,33 @@ function renderStats() {
 }
 
 // ---- Orders ----
+let _orderFilter = 'processing';
+function setFilter(f) {
+  _orderFilter = f;
+  document.querySelectorAll('.fchip').forEach(c => c.classList.toggle('on', c.dataset.filter === f));
+  renderOrders();
+}
+
 function renderOrders() {
-  const needsBox = S.orders.filter(x => x.status === 'needs_box_size').length;
+  const all = S.orders;
+  const filtered = _orderFilter === 'all'
+    ? all
+    : all.filter(o => (o.order?.status || '').toLowerCase() === _orderFilter
+        || (o.isSimulated && _orderFilter === 'processing')); // simulated orders show under processing
+
+  const needsBox = all.filter(x => x.status === 'needs_box_size').length;
   $('stats').innerHTML = [
-    ['Total', S.orders.length],
-    ['Awaiting', S.orders.filter(x => x.status === 'staged').length],
-    ['Labels ready', S.orders.filter(x => x.status === 'label_ready' || x.status === 'delivered').length],
+    ['Processing', all.filter(o => (o.order?.status || '') === 'processing').length],
+    ['Awaiting buy', all.filter(x => x.status === 'staged').length],
+    ['Labels ready', all.filter(x => x.status === 'label_ready' || x.status === 'delivered').length],
     ['Box needed', needsBox],
   ].map(([l,n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
 
-  if (!S.orders.length) {
-    $('orders').innerHTML = '<div class="empty">No orders yet. Tap "Simulate order" to test the full pipeline.</div>';
+  if (!filtered.length) {
+    $('orders').innerHTML = `<div class="empty">No ${_orderFilter === 'all' ? '' : _orderFilter + ' '}orders.</div>`;
     return;
   }
-  $('orders').innerHTML = S.orders.map(o => {
+  $('orders').innerHTML = filtered.map(o => {
     const st = o.status || 'received';
     const ship = o.order?.shipping || {};
     const rate = o.chosenRate ? `${o.chosenRate.payment_amount} ${(o.chosenRate.payment_currency||'cad').toUpperCase()}` : '';
