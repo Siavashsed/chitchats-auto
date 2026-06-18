@@ -7,7 +7,7 @@
 // "[ChitChats Auto] Label purchased". Skips orders that already have it.
 
 const Chitchats = require('../lib/chitchats');
-const { computePackage, DEFAULT_RULES } = require('../lib/packages');
+const { computePackage } = require('../lib/packages');
 const { normalizeOrder } = require('../lib/woo');
 
 // ---- Config from GitHub Secrets (env vars) ----
@@ -25,10 +25,6 @@ const BREVO_FROM_NAME = process.env.BREVO_FROM_NAME || 'Dalmend Shipping';
 const RETURN_ADDRESS = process.env.RETURN_ADDRESS
   ? JSON.parse(process.env.RETURN_ADDRESS)
   : { name: 'Dalmend', city: 'Toronto', province_code: 'ON', country_code: 'CA' };
-const PACKAGING = process.env.PACKAGING_RULES
-  ? JSON.parse(process.env.PACKAGING_RULES)
-  : DEFAULT_RULES;
-
 // ---- WooCommerce ----
 async function wooGet(path) {
   const res = await fetch(`${WOO_BASE}/wp-json/wc/v3${path}`, {
@@ -116,8 +112,14 @@ async function main() {
       continue;
     }
 
-    const pkg = computePackage(order, PACKAGING);
+    const pkg = computePackage(order);
     console.log(`  Package: ${pkg.boxName}, ${pkg.weight}g, ${pkg.size_x}x${pkg.size_y}x${pkg.size_z}cm`);
+
+    if (pkg.needsBoxSize) {
+      console.log(`  SKIPPED: ${pkg.totalQty} items — open dashboard to enter box size and buy manually.`);
+      results.push({ ok: false, number: order.number, name: order.shipping.name, error: `${pkg.totalQty} items — open dashboard to set box size` });
+      continue;
+    }
     console.log(`  Items: ${pkg.summary}`);
 
     try {

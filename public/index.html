@@ -75,6 +75,8 @@
   .s-label_ready,.s-delivered{background:#06281a;color:#86efac}
   .s-failed{background:#2a0c0c;color:#fca5a5}
   .s-off{background:#1f2937;color:#9ca3af}
+  .s-needs_box_size{background:#1f1400;color:var(--amber)}
+  .order-warn{border-color:var(--amber)!important}
   .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .events{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px;font-size:11.5px;color:var(--mut);max-height:0;overflow:hidden;transition:.2s}
   .events.open{max-height:300px;overflow:auto}
@@ -356,8 +358,13 @@ function renderStats() {
 
 // ---- Orders ----
 function renderOrders() {
-  $('stats').innerHTML = [['Total', S.orders.length], ['Awaiting', S.orders.filter(x=>x.status==='staged').length], ['Labels ready', S.orders.filter(x=>x.status==='label_ready'||x.status==='delivered').length], ['Failed', S.orders.filter(x=>x.status==='failed').length]]
-    .map(([l,n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+  const needsBox = S.orders.filter(x => x.status === 'needs_box_size').length;
+  $('stats').innerHTML = [
+    ['Total', S.orders.length],
+    ['Awaiting', S.orders.filter(x => x.status === 'staged').length],
+    ['Labels ready', S.orders.filter(x => x.status === 'label_ready' || x.status === 'delivered').length],
+    ['Box needed', needsBox],
+  ].map(([l,n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
 
   if (!S.orders.length) {
     $('orders').innerHTML = '<div class="empty">No orders yet. Tap "Simulate order" to test the full pipeline.</div>';
@@ -365,21 +372,63 @@ function renderOrders() {
   }
   $('orders').innerHTML = S.orders.map(o => {
     const st = o.status || 'received';
+    const ship = o.order?.shipping || {};
     const rate = o.chosenRate ? `${o.chosenRate.payment_amount} ${(o.chosenRate.payment_currency||'cad').toUpperCase()}` : '';
-    return `<div class="order">
+    const needsBox = st === 'needs_box_size';
+    const chitchatsUrl = o.shipmentId && !o.shipmentId.startsWith('MOCK')
+      ? `https://chitchats.com/dashboard/shipments/${o.shipmentId}`
+      : null;
+
+    // Products line: each item name + qty
+    const products = (o.order?.lineItems || []).map(li => `${li.quantity}x ${li.name}`).join(', ');
+
+    return `<div class="order${needsBox ? ' order-warn' : ''}">
       <div class="row">
-        <h4>#${o.number} <span class="pill s-${st}">${st.replace(/_/g,' ')}</span></h4>
+        <h4>
+          <svg viewBox="0 0 24 24" style="color:var(--mint)"><path d="M3 7h13v10H3z"/><path d="M16 10h4l1 3v4h-5z"/><circle cx="7" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg>
+          Order #${o.number}
+          <span class="pill s-${st}">${st.replace(/_/g,' ')}</span>
+        </h4>
         <div class="grow"></div>
-        ${o.cost ? `<span class="meta" style="margin:0">${o.cost}</span>` : rate ? `<span class="meta" style="margin:0">~${rate}</span>` : ''}
+        ${o.cost ? `<b style="color:var(--mint)">${o.cost}</b>` : rate ? `<span class="meta" style="margin:0">~${rate}</span>` : ''}
       </div>
+
+      <!-- Product name -->
+      <div style="font-size:14px;font-weight:600;margin:8px 0 2px;color:var(--ink)">${products || 'No items'}</div>
+
+      <!-- Address -->
       <div class="meta">
-        ${o.order?.shipping?.name||''} &middot; ${o.order?.shipping?.city||''} ${o.order?.shipping?.province_code||''} ${o.order?.shipping?.postal_code||''}<br>
-        ${o.pkg ? `${o.pkg.summary} &rarr; <b>${o.pkg.boxName}</b> ${o.pkg.weight}g (${o.pkg.size_x}&times;${o.pkg.size_y}&times;${o.pkg.size_z}cm)` : ''}
-        ${o.tracking ? `<br>Tracking: ${o.tracking}` : ''}
+        <svg viewBox="0 0 24 24" style="width:13px;height:13px;display:inline-block;vertical-align:middle;margin-right:3px"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        ${ship.name || ''} &middot; ${ship.address_1 || ''}${ship.address_2 ? ', '+ship.address_2 : ''}, ${ship.city || ''} ${ship.province_code || ''} ${ship.postal_code || ''}
       </div>
+
+      <!-- Box + tracking -->
+      <div class="meta" style="margin-top:4px">
+        ${o.pkg ? `<svg viewBox="0 0 24 24" style="width:13px;height:13px;display:inline-block;vertical-align:middle;margin-right:3px"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg> ${o.pkg.boxName}` : ''}
+        ${o.tracking ? ` &middot; Tracking: <b>${o.tracking}</b>` : ''}
+      </div>
+
+      <!-- Box size input for 3+ items -->
+      ${needsBox ? `<div style="margin-top:12px;background:#1a0f00;border:1px solid var(--amber);border-radius:10px;padding:12px">
+        <div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:8px">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;display:inline-block;vertical-align:middle"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          ${o.pkg?.totalQty} items — enter box dimensions before buying
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 120px;gap:8px;align-items:end">
+          <div><label class="f" style="margin-top:0">Length (cm)</label><input id="bx_${o.orderId}" type="number" placeholder="24" style="padding:8px 10px"></div>
+          <div><label class="f" style="margin-top:0">Width (cm)</label><input id="by_${o.orderId}" type="number" placeholder="21" style="padding:8px 10px"></div>
+          <div><label class="f" style="margin-top:0">Height (cm)</label><input id="bz_${o.orderId}" type="number" placeholder="22" style="padding:8px 10px"></div>
+          <button class="btn amber" onclick="buyWithBox('${o.orderId}')">
+            <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Buy label
+          </button>
+        </div>
+      </div>` : ''}
+
+      <!-- Action buttons -->
       <div class="row" style="margin-top:10px">
-        ${st==='staged' ? `<button class="btn amber" onclick="buy('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 01-8 0"/></svg>Buy &amp; print ${rate?'('+rate+')':''}</button>` : ''}
-        ${o.labelFile ? `<a class="btn ghost" href="/label/${o.labelFile}" target="_blank"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>View label</a>` : ''}
+        ${st === 'staged' ? `<button class="btn amber" onclick="buy('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 01-8 0"/></svg>Buy &amp; print ${rate ? '('+rate+')' : ''}</button>` : ''}
+        ${o.labelFile ? `<a class="btn primary" href="/label/${o.labelFile}" target="_blank"><svg viewBox="0 0 24 24"><path d="M17 17H17.01M17 3H5a2 2 0 00-2 2v4a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2zM19 9v6a2 2 0 01-2 2H5"/></svg>Print label</a>` : ''}
+        ${chitchatsUrl ? `<a class="btn ghost" href="${chitchatsUrl}" target="_blank"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>ChitChats</a>` : ''}
         ${o.labelFile ? `<button class="btn ghost" onclick="redeliver('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>Re-send</button>` : ''}
         <button class="btn ghost" onclick="this.closest('.order').querySelector('.events').classList.toggle('open')"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Log</button>
       </div>
@@ -396,6 +445,19 @@ async function buy(id) {
   if (!confirm('Buy postage for order ' + id + '? This spends money in Live mode.')) return;
   try { toast('Buying...'); await api('/api/order/' + id + '/buy', {}); await load(); toast('Bought and delivered'); }
   catch(e) { toast(e.message, 1); }
+}
+async function buyWithBox(id) {
+  const x = parseFloat(document.getElementById('bx_'+id)?.value);
+  const y = parseFloat(document.getElementById('by_'+id)?.value);
+  const z = parseFloat(document.getElementById('bz_'+id)?.value);
+  if (!x || !y || !z) { toast('Enter all 3 dimensions', 1); return; }
+  if (!confirm(`Buy label for order ${id} with box ${x}x${y}x${z}cm? Spends money in Live mode.`)) return;
+  try {
+    toast('Buying...');
+    await api('/api/order/' + id + '/set-box', { size_x: x, size_y: y, size_z: z });
+    await api('/api/order/' + id + '/buy', {});
+    await load(); toast('Bought and delivered');
+  } catch(e) { toast(e.message, 1); }
 }
 async function redeliver(id) {
   try { await api('/api/order/' + id + '/redeliver', {}); toast('Re-sent'); }

@@ -186,6 +186,39 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { ok: true, order: rec });
     }
 
+    // ---- API: set box dimensions for 3+ item orders ----
+    if (req.method === 'POST' && pathname.match(/^\/api\/order\/[^/]+\/set-box$/)) {
+      const id = pathname.split('/')[3];
+      const { size_x, size_y, size_z } = JSON.parse(body || '{}');
+      if (!size_x || !size_y || !size_z) return send(res, 400, { error: 'size_x, size_y, size_z required' });
+      const rec = store.getOrder(id);
+      if (!rec) return send(res, 404, { error: 'order not found' });
+      const updatedPkg = { ...rec.pkg, size_x, size_y, size_z, needsBoxSize: false, boxName: `${size_x}x${size_y}x${size_z}cm (manual)` };
+      store.upsertOrder({ orderId: id, pkg: updatedPkg, status: 'received' });
+      store.logEvent(id, `Box set to ${size_x}x${size_y}x${size_z}cm`);
+      // Now create a ChitChats shipment so the order is staged for buying
+      const settings = store.getSettings();
+      const updatedOrder = { ...rec.order, pkg: updatedPkg };
+      updatedOrder.pkg = updatedPkg;
+      const { intake } = require('./lib/pipeline');
+      // Re-run intake with fixed pkg — patch order's lineItems so computePackage won't re-flag it
+      // Instead, directly create shipment and stage it
+      const { isMock } = require('./lib/pipeline');
+      if (isMock(settings)) {
+        store.upsertOrder({ orderId: id, status: 'staged', shipmentId: 'MOCK-' + id });
+        store.logEvent(id, '[MOCK] Shipment staged with manual box dimensions');
+      } else {
+        const Chitchats = require('./lib/chitchats');
+        const cfg = { clientId: settings.chitchats.clientId, accessToken: settings.chitchats.accessToken, environment: settings.environment === 'live' ? 'live' : 'staging' };
+        const payload = Chitchats.buildShipmentPayload(rec.order, updatedPkg, settings, { cheapest: true });
+        const created = await Chitchats.createShipment(cfg, payload);
+        const ship = created.shipment || created;
+        store.upsertOrder({ orderId: id, status: 'staged', shipmentId: ship.id });
+        store.logEvent(id, `Shipment ${ship.id} created with manual box ${size_x}x${size_y}x${size_z}cm`);
+      }
+      return send(res, 200, { ok: true, order: store.getOrder(id) });
+    }
+
     // ---- API: re-deliver existing label ----
     if (req.method === 'POST' && pathname.match(/^\/api\/order\/[^/]+\/redeliver$/)) {
       const id = pathname.split('/')[3];
