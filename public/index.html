@@ -76,7 +76,11 @@
   .s-failed{background:#2a0c0c;color:#fca5a5}
   .s-off{background:#1f2937;color:#9ca3af}
   .s-needs_box_size{background:#1f1400;color:var(--amber)}
+  .s-refunded{background:#1a0a0a;color:#f87171}
+  .s-new{background:#0c2040;color:#60c8ff;animation:blink 2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
   .order-warn{border-color:var(--amber)!important}
+  .refund-form{margin-top:10px;background:#160505;border:1px solid #7f1d1d;border-radius:10px;padding:12px}
   .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .events{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px;font-size:11.5px;color:var(--mut);max-height:0;overflow:hidden;transition:.2s}
   .events.open{max-height:300px;overflow:auto}
@@ -146,6 +150,10 @@
       <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
       Run workflow
     </a>
+    <button class="btn ghost" onclick="syncAll()">
+      <svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      Sync all orders
+    </button>
     <div style="display:flex;align-items:center;gap:8px">
       <span style="font-size:12px;color:var(--mut)">Daily at</span>
       <input id="pollHour" type="number" min="0" max="23" style="width:56px;padding:7px 8px" onchange="savePollHour()">
@@ -321,10 +329,23 @@ const MODE_HINT = {
   auto: 'Each order buys the cheapest label automatically. The label is emailed and shown here. No approval needed.',
 };
 
+let _seenCleared = false;
 async function load() {
   S = await api('/api/state');
   renderMode(); renderEnv(); renderStats(); renderOrders(); fillSettings(); renderPackages(); renderPoll(); renderPush();
   $('hookUrl').textContent = location.origin + '/webhook/woo';
+  // Mark new orders as seen after user has had a moment to notice them
+  if (!_seenCleared && S.orders.some(o => o.isNew)) {
+    setTimeout(() => { api('/api/orders/mark-seen', {}).catch(() => {}); _seenCleared = true; }, 8000);
+  }
+}
+async function syncAll() {
+  try {
+    toast('Syncing all orders from WooCommerce...');
+    const r = await api('/api/sync-all', {});
+    await load();
+    toast(r.synced > 0 ? `${r.synced} new order${r.synced !== 1 ? 's' : ''} imported` : 'All orders already up to date');
+  } catch(e) { toast(e.message, 1); }
 }
 
 // ---- Mode ----
@@ -392,6 +413,7 @@ function renderOrders() {
           <svg viewBox="0 0 24 24" style="color:var(--mint)"><path d="M3 7h13v10H3z"/><path d="M16 10h4l1 3v4h-5z"/><circle cx="7" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg>
           Order #${o.number}
           <span class="pill s-${st}">${st.replace(/_/g,' ')}</span>
+          ${o.isNew ? '<span class="pill s-new">New</span>' : ''}
         </h4>
         <div class="grow"></div>
         ${o.cost ? `<b style="color:var(--mint)">${o.cost}</b>` : rate ? `<span class="meta" style="margin:0">~${rate}</span>` : ''}
@@ -412,16 +434,16 @@ function renderOrders() {
         ${o.tracking ? ` &middot; Tracking: <b>${o.tracking}</b>` : ''}
       </div>
 
-      <!-- Box size input for 3+ items -->
+      <!-- Parcel dimensions input for 3+ items -->
       ${needsBox ? `<div style="margin-top:12px;background:#1a0f00;border:1px solid var(--amber);border-radius:10px;padding:12px">
         <div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:8px">
           <svg viewBox="0 0 24 24" style="width:14px;height:14px;display:inline-block;vertical-align:middle"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          ${o.pkg?.totalQty} items — enter box dimensions before buying
+          ${o.pkg?.totalQty} items — enter parcel size (cm)
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 120px;gap:8px;align-items:end">
-          <div><label class="f" style="margin-top:0">Length (cm)</label><input id="bx_${o.orderId}" type="number" placeholder="24" style="padding:8px 10px"></div>
-          <div><label class="f" style="margin-top:0">Width (cm)</label><input id="by_${o.orderId}" type="number" placeholder="21" style="padding:8px 10px"></div>
-          <div><label class="f" style="margin-top:0">Height (cm)</label><input id="bz_${o.orderId}" type="number" placeholder="22" style="padding:8px 10px"></div>
+          <div><label class="f" style="margin-top:0">Length</label><input id="bx_${o.orderId}" type="number" placeholder="24" style="padding:8px 10px"></div>
+          <div><label class="f" style="margin-top:0">Width</label><input id="by_${o.orderId}" type="number" placeholder="21" style="padding:8px 10px"></div>
+          <div><label class="f" style="margin-top:0">Height</label><input id="bz_${o.orderId}" type="number" placeholder="22" style="padding:8px 10px"></div>
           <button class="btn amber" onclick="buyWithBox('${o.orderId}')">
             <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Buy label
           </button>
@@ -434,8 +456,22 @@ function renderOrders() {
         ${o.labelFile ? `<a class="btn primary" href="/label/${o.labelFile}" target="_blank"><svg viewBox="0 0 24 24"><path d="M17 17H17.01M17 3H5a2 2 0 00-2 2v4a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2zM19 9v6a2 2 0 01-2 2H5"/></svg>Print label</a>` : ''}
         ${chitchatsUrl ? `<a class="btn ghost" href="${chitchatsUrl}" target="_blank"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>ChitChats</a>` : ''}
         ${o.labelFile ? `<button class="btn ghost" onclick="redeliver('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>Re-send</button>` : ''}
+        ${st !== 'refunded' ? `<button class="btn ghost" style="color:#f87171" onclick="toggleRefund('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109 9"/><path d="M3 3v9h9"/><path d="M13 10l-4 4 4 4"/></svg>Refund</button>` : ''}
         <button class="btn ghost" onclick="this.closest('.order').querySelector('.events').classList.toggle('open')"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Log</button>
       </div>
+
+      <!-- Refund form (hidden by default) -->
+      <div class="refund-form" id="rf_${o.orderId}" style="display:none">
+        <div style="font-size:13px;font-weight:700;color:#f87171;margin-bottom:8px">Process Refund</div>
+        <div style="display:grid;grid-template-columns:110px 1fr auto;gap:8px;align-items:end">
+          <div><label class="f" style="margin-top:0">Amount ($)</label><input id="ra_${o.orderId}" type="number" step="0.01" placeholder="${o.order?.value?.toFixed(2)||'0.00'}" style="padding:8px 10px"></div>
+          <div><label class="f" style="margin-top:0">Reason</label><input id="rr_${o.orderId}" type="text" placeholder="Customer request" style="padding:8px 10px"></div>
+          <button class="btn" style="background:#7f1d1d;color:#fca5a5" onclick="processRefund('${o.orderId}', ${o.order?.value||0})">
+            <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Confirm refund
+          </button>
+        </div>
+      </div>
+
       <div class="events">${[...(o.events||[])].reverse().map(e=>`<div>${new Date(e.at).toLocaleString()} &ndash; ${e.message}</div>`).join('')}</div>
     </div>`;
   }).join('');
@@ -466,6 +502,23 @@ async function buyWithBox(id) {
 async function redeliver(id) {
   try { await api('/api/order/' + id + '/redeliver', {}); toast('Re-sent'); }
   catch(e) { toast(e.message, 1); }
+}
+function toggleRefund(id) {
+  const el = document.getElementById('rf_' + id);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+async function processRefund(id, defaultAmt) {
+  const amtEl = document.getElementById('ra_' + id);
+  const rrEl = document.getElementById('rr_' + id);
+  const amount = parseFloat(amtEl?.value) || defaultAmt;
+  const reason = rrEl?.value || 'Customer request';
+  if (!amount) { toast('Enter refund amount', 1); return; }
+  if (!confirm(`Refund $${amount} for order ${id}? This updates WooCommerce.`)) return;
+  try {
+    toast('Processing refund...');
+    await api('/api/order/' + id + '/refund', { amount, reason });
+    await load(); toast('Refund processed');
+  } catch(e) { toast(e.message, 1); }
 }
 
 // ---- Poll bar ----

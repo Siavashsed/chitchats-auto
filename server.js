@@ -219,6 +219,33 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { ok: true, order: store.getOrder(id) });
     }
 
+    // ---- API: sync all WooCommerce processing orders into store ----
+    if (req.method === 'POST' && pathname === '/api/sync-all') {
+      const result = await poller.syncAll();
+      return send(res, 200, { ok: true, ...result });
+    }
+
+    // ---- API: clear isNew flags (user has seen the dashboard) ----
+    if (req.method === 'POST' && pathname === '/api/orders/mark-seen') {
+      store.clearNewFlags();
+      return send(res, 200, { ok: true });
+    }
+
+    // ---- API: refund an order ----
+    if (req.method === 'POST' && pathname.match(/^\/api\/order\/[^/]+\/refund$/)) {
+      const id = pathname.split('/')[3];
+      const { amount, reason } = JSON.parse(body || '{}');
+      if (!amount) return send(res, 400, { error: 'amount required' });
+      const rec = store.getOrder(id);
+      if (!rec) return send(res, 404, { error: 'order not found' });
+      const settings = store.getSettings();
+      const wcId = rec.order.orderId;
+      const refundData = await woo.createRefund(settings, wcId, { amount, reason });
+      store.upsertOrder({ orderId: id, status: 'refunded' });
+      store.logEvent(id, `Refund $${amount} processed${reason ? ' — ' + reason : ''}. WC ref: ${refundData.id}`);
+      return send(res, 200, { ok: true, refund: refundData });
+    }
+
     // ---- API: re-deliver existing label ----
     if (req.method === 'POST' && pathname.match(/^\/api\/order\/[^/]+\/redeliver$/)) {
       const id = pathname.split('/')[3];
@@ -278,4 +305,6 @@ server.listen(PORT, () => {
   console.log(`  Webhook: POST http://localhost:${PORT}/webhook/woo\n`);
   // Start the daily poller
   if (s.mode !== 'off') poller.schedule(s);
+  // Pull all existing WC processing orders on startup
+  poller.syncAll().catch(e => console.warn('Startup sync failed:', e.message));
 });
