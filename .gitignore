@@ -1,0 +1,6 @@
+data/settings.json
+data/subscriptions.json
+data/vapid-keys.json
+labels/
+node_modules/
+.env

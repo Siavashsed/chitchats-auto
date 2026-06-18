@@ -1,0 +1,13 @@
+{
+  "name": "Dalmend Ship",
+  "short_name": "Ship",
+  "description": "ChitChats label automation for Dalmend orders.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e0d",
+  "theme_color": "#22c55e",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -1,0 +1,48 @@
+name: Daily Shipping Labels
+
+on:
+  schedule:
+    # 9am Toronto time. Use 13:00 UTC in summer (EDT, Apr-Oct), 14:00 UTC in winter (EST, Nov-Mar).
+    # Runs at both times — deduplication via WooCommerce order notes prevents double-buying.
+    - cron: '0 13 * * *'   # 9am EDT (summer)
+    - cron: '0 14 * * *'   # 9am EST (winter)
+  workflow_dispatch:
+    # Also adds a "Run workflow" button in GitHub UI and GitHub mobile app.
+    # Tap that anytime to manually trigger a check.
+
+jobs:
+  buy-labels:
+    name: Poll WooCommerce + buy ChitChats labels
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Buy labels and email
+        run: node scripts/run-labels.js
+        env:
+          # ChitChats
+          CC_CLIENT_ID: ${{ secrets.CC_CLIENT_ID }}
+          CC_ACCESS_TOKEN: ${{ secrets.CC_ACCESS_TOKEN }}
+          CC_ENV: live
+
+          # WooCommerce
+          WOO_URL: https://dalmend.com
+          WOO_KEY: ${{ secrets.WOO_KEY }}
+          WOO_SECRET: ${{ secrets.WOO_SECRET }}
+
+          # Brevo (label emails)
+          BREVO_KEY: ${{ secrets.BREVO_KEY }}
+          BREVO_TO: sia@kavalsia.com
+          BREVO_FROM: sia@kavalsia.com
+          BREVO_FROM_NAME: Dalmend Shipping
+
+          # Your return/sender address
+          RETURN_ADDRESS: ${{ secrets.RETURN_ADDRESS }}

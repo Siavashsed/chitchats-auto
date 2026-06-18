@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dalmend Ship">
+<meta name="theme-color" content="#22c55e">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon.svg">
+<title>Dalmend Ship</title>
+<style>
+  :root{
+    --bg:#0a0e0d;--panel:#111715;--panel2:#161e1b;--line:#1f2a26;
+    --ink:#e8f1ed;--mut:#7e928b;--mint:#22c55e;--mint2:#16a34a;
+    --amber:#f59e0b;--red:#ef4444;--blue:#38bdf8;--r:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Inter",Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:16px 14px 100px}
+  header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 0 18px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+  .dot{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--mint),#0f766e);display:grid;place-items:center;flex:none}
+  .grow{flex:1}
+  .badge{font-size:11px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);color:var(--mut);background:var(--panel)}
+  .badge.live{color:#fecaca;border-color:#7f1d1d;background:#1c0d0d}
+  .badge.staging{color:#bae6fd;border-color:#0c4a6e;background:#08161e}
+  .badge.mock{color:#fde68a;border-color:#78350f;background:#1c1407}
+
+  /* Mode bar */
+  .modebar{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:5px}
+  .modebar button{flex:1;border:0;background:transparent;color:var(--mut);padding:9px 8px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;transition:.15s;white-space:nowrap}
+  .modebar button.on{background:var(--mint);color:#04150c}
+  .modebar button.on.off{background:#475569;color:#fff}
+  .modebar button.on.stage{background:var(--amber);color:#1a1205}
+
+  /* Poll bar */
+  .pollbar{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px;flex-wrap:wrap}
+  .pollbar .info{font-size:13px;color:var(--mut);flex:1}
+  .pollbar .info strong{color:var(--ink)}
+
+  /* Push row */
+  .pushrow{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px;flex-wrap:wrap}
+  .pushrow .info{font-size:13px;color:var(--mut);flex:1}
+  .pushrow .info strong{color:var(--ink)}
+
+  .tabs{display:flex;gap:4px;margin:18px 0 14px;border-bottom:1px solid var(--line)}
+  .tabs button{background:0;border:0;color:var(--mut);padding:10px 14px;font-weight:600;font-size:14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tabs button.on{color:var(--ink);border-color:var(--mint)}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+  .stat .n{font-size:24px;font-weight:700}
+  .stat .l{font-size:11px;color:var(--mut);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+
+  .btn{border:0;border-radius:10px;padding:10px 15px;font-weight:600;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s;white-space:nowrap}
+  .btn.primary{background:var(--mint);color:#04150c}
+  .btn.primary:hover{background:var(--mint2)}
+  .btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--mint)}
+  .btn.amber{background:var(--amber);color:#1a1205}
+  .btn.red{background:#7f1d1d;color:#fecaca}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+  .order{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;background:var(--panel2)}
+  .order h4{margin:0;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .meta{color:var(--mut);font-size:12.5px;margin-top:4px;line-height:1.6}
+  .pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.4px}
+  .s-received{background:#1e293b;color:#cbd5e1}
+  .s-staged{background:#2a1f05;color:#fde68a}
+  .s-buying{background:#082030;color:#7dd3fc}
+  .s-label_ready,.s-delivered{background:#06281a;color:#86efac}
+  .s-failed{background:#2a0c0c;color:#fca5a5}
+  .s-off{background:#1f2937;color:#9ca3af}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .events{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px;font-size:11.5px;color:var(--mut);max-height:0;overflow:hidden;transition:.2s}
+  .events.open{max-height:300px;overflow:auto}
+  .events div{padding:2px 0}
+
+  label.f{display:block;font-size:12px;color:var(--mut);margin:12px 0 5px;font-weight:600}
+  input,select{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:9px;padding:10px 12px;font-size:14px;font-family:inherit}
+  input:focus,select:focus{outline:0;border-color:var(--mint)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .sub{font-size:13px;font-weight:700;color:var(--mint);margin:18px 0 4px;display:flex;align-items:center;gap:7px}
+  .toggle{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;color:var(--ink);user-select:none}
+  .switch{width:40px;height:23px;border-radius:999px;background:#334155;position:relative;transition:.2s;flex:none}
+  .switch.on{background:var(--mint)}
+  .switch::after{content:"";position:absolute;width:17px;height:17px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s}
+  .switch.on::after{left:20px}
+  .hint{font-size:11.5px;color:var(--mut);margin-top:5px;line-height:1.5}
+  .rule{display:grid;grid-template-columns:1fr 1.4fr 80px 32px;gap:6px;margin-bottom:6px;align-items:center}
+  .box{display:grid;grid-template-columns:1.3fr 60px 50px 50px 50px 32px;gap:6px;margin-bottom:6px;align-items:center}
+  .x{background:#2a0c0c;color:#fca5a5;border:0;border-radius:7px;height:36px;cursor:pointer;font-size:18px;line-height:1}
+  .empty{text-align:center;color:var(--mut);padding:40px 10px;font-size:14px}
+  footer{text-align:center;color:var(--mut);font-size:11px;padding:24px 0 0}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--mint);color:#04150c;padding:12px 20px;border-radius:12px;font-weight:600;font-size:13px;box-shadow:0 8px 30px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.25s;z-index:99}
+  .toast.show{opacity:1}
+  .toast.err{background:var(--red);color:#fff}
+
+  @media(max-width:640px){
+    .stats{grid-template-columns:1fr 1fr}
+    .grid3{grid-template-columns:1fr}
+    .grid2{grid-template-columns:1fr}
+    .rule{grid-template-columns:1fr 1fr 60px 30px}
+    .box{grid-template-columns:1fr 1fr 1fr 1fr 1fr 30px}
+    .modebar button{font-size:12px;padding:8px 6px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">
+      <span class="dot">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#04150c"><path d="M3 7h13v10H3z"/><path d="M16 10h4l1 3v4h-5z"/><circle cx="7" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg>
+      </span>
+      Dalmend Ship
+    </div>
+    <div class="grow"></div>
+    <span class="badge" id="envBadge">...</span>
+  </header>
+
+  <!-- Mode toggle -->
+  <div class="modebar" id="modebar">
+    <button data-mode="off">Off</button>
+    <button data-mode="stage">Stage &amp; approve</button>
+    <button data-mode="auto">Full auto</button>
+  </div>
+  <div class="hint" style="margin-top:8px" id="modeHint"></div>
+
+  <!-- Poll status bar -->
+  <div class="pollbar">
+    <svg viewBox="0 0 24 24" style="color:var(--mint)"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    <div class="info" id="pollInfo">Loading...</div>
+    <button class="btn ghost" id="pollBtn" onclick="pollNow()">
+      <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+      Check now
+    </button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;color:var(--mut)">Daily at</span>
+      <input id="pollHour" type="number" min="0" max="23" style="width:56px;padding:7px 8px" onchange="savePollHour()">
+      <span style="font-size:12px;color:var(--mut)">h</span>
+    </div>
+  </div>
+
+  <!-- Push notification row -->
+  <div class="pushrow">
+    <svg viewBox="0 0 24 24" style="color:var(--mint)"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <div class="info" id="pushInfo">Push notifications: checking...</div>
+    <button class="btn primary" id="pushBtn" onclick="togglePush()" style="display:none"></button>
+  </div>
+
+  <div class="tabs">
+    <button data-tab="orders" class="on">Orders</button>
+    <button data-tab="packages">Packages</button>
+    <button data-tab="settings">Settings</button>
+  </div>
+
+  <!-- ORDERS TAB -->
+  <section id="tab-orders">
+    <div class="stats" id="stats"></div>
+    <div class="row" style="margin-bottom:14px">
+      <button class="btn primary" onclick="simulate()">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>Simulate order
+      </button>
+      <button class="btn ghost" onclick="load()">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh
+      </button>
+    </div>
+    <div id="orders"></div>
+  </section>
+
+  <!-- PACKAGES TAB -->
+  <section id="tab-packages" style="display:none">
+    <div class="card">
+      <div class="sub">
+        <svg viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
+        Per-item weights
+      </div>
+      <div class="hint">Match a product by name (contains) or exact SKU and give its weight in grams. First match wins; unmatched items use the default.</div>
+      <div id="rules" style="margin-top:10px"></div>
+      <button class="btn ghost" onclick="addRule()" style="margin-top:6px">+ Add item rule</button>
+      <div class="grid2" style="margin-top:14px">
+        <div><label class="f">Default item weight (g)</label><input id="pk_default" type="number"></div>
+        <div><label class="f">Packaging tare (g)</label><input id="pk_tare" type="number"></div>
+      </div>
+      <label class="f">Customs / label description</label>
+      <input id="pk_desc">
+    </div>
+    <div class="card">
+      <div class="sub">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        Box presets (chosen by total quantity)
+      </div>
+      <div class="hint">Smallest box whose "max qty" covers the order is used. Dimensions in cm.</div>
+      <div class="box" style="color:var(--mut);font-size:11px;font-weight:700">
+        <span>Name</span><span>Max qty</span><span>X</span><span>Y</span><span>Z</span><span></span>
+      </div>
+      <div id="boxes"></div>
+      <button class="btn ghost" onclick="addBox()" style="margin-top:6px">+ Add box</button>
+    </div>
+    <button class="btn primary" onclick="savePackages()">
+      <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Save packaging rules
+    </button>
+  </section>
+
+  <!-- SETTINGS TAB -->
+  <section id="tab-settings" style="display:none">
+    <div class="card">
+      <div class="sub">ChitChats account</div>
+      <div class="grid2">
+        <div><label class="f">Client ID</label><input id="cc_client"></div>
+        <div><label class="f">Access token</label><input id="cc_token" placeholder="paste to change"></div>
+      </div>
+      <label class="f">Environment</label>
+      <select id="cc_env">
+        <option value="mock">Mock (offline test, no money)</option>
+        <option value="staging">Staging sandbox (no money)</option>
+        <option value="live">Live (spends real money)</option>
+      </select>
+      <div class="hint">Get token: ChitChats &gt; Settings &gt; Developer &gt; Access Tokens. Start on Mock until the flow works, then switch to Live.</div>
+    </div>
+
+    <div class="card">
+      <div class="sub">WooCommerce (dalmend.com)</div>
+      <label class="f">Store URL</label><input id="wc_url">
+      <div class="grid2">
+        <div><label class="f">Consumer key</label><input id="wc_key" placeholder="paste to change"></div>
+        <div><label class="f">Consumer secret</label><input id="wc_secret" placeholder="paste to change"></div>
+      </div>
+      <label class="f">Webhook secret (optional - for real-time mode)</label>
+      <input id="wc_hook" placeholder="paste to change">
+      <div class="hint">
+        Polling mode does not need a webhook. For real-time, add a webhook in WooCommerce: Settings &gt; Advanced &gt; Webhooks, topic <b>Order created</b>, URL <b><span id="hookUrl"></span></b>.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sub">Return / sender address</div>
+      <label class="f">Name</label><input id="ra_name">
+      <label class="f">Address line 1</label><input id="ra_a1">
+      <div class="grid3">
+        <div><label class="f">City</label><input id="ra_city"></div>
+        <div><label class="f">Province</label><input id="ra_prov"></div>
+        <div><label class="f">Postal code</label><input id="ra_post"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sub">Label delivery</div>
+      <label class="toggle" style="margin-bottom:10px">
+        <span class="switch" id="dl_brevo_sw" onclick="tog('dl_brevo')"></span> Email via Brevo
+      </label>
+      <div id="dl_brevo_box" class="grid2">
+        <div><label class="f">Brevo API key</label><input id="br_key" placeholder="paste to change"></div>
+        <div><label class="f">Send to</label><input id="br_to"></div>
+        <div><label class="f">From email</label><input id="br_from"></div>
+        <div><label class="f">From name</label><input id="br_name"></div>
+      </div>
+
+      <label class="toggle" style="margin:16px 0 10px">
+        <span class="switch" id="dl_gmail_sw" onclick="tog('dl_gmail')"></span> Email via Gmail (app password)
+      </label>
+      <div id="dl_gmail_box" class="grid2">
+        <div><label class="f">Gmail address</label><input id="gm_user"></div>
+        <div><label class="f">App password</label><input id="gm_pass" placeholder="paste to change"></div>
+        <div><label class="f">Send to</label><input id="gm_to"></div>
+      </div>
+      <div class="hint">Google App Password: myaccount.google.com &gt; Security &gt; App passwords</div>
+
+      <label class="toggle" style="margin:16px 0 10px">
+        <span class="switch" id="dl_print_sw" onclick="tog('dl_print')"></span> Auto-print to local printer
+      </label>
+      <div id="dl_print_box" class="grid2">
+        <div><label class="f">Printer name (blank = default)</label><input id="pr_printer"></div>
+        <div><label class="f">Media size</label><input id="pr_media" placeholder="4x6.Postcard"></div>
+      </div>
+    </div>
+
+    <button class="btn primary" onclick="saveSettings()">
+      <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Save settings
+    </button>
+  </section>
+
+  <footer>Powered By Nexus V22 &middot; Kavalsia Inc. &middot; Siavash Sadighi</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ---- Bootstrap ----
+let S = { settings:{}, orders:[], poll:{}, subscriptions:0 };
+const $ = id => document.getElementById(id);
+
+function toast(msg, err) {
+  const t=$('toast'); t.textContent=msg; t.className='toast show'+(err?' err':'');
+  setTimeout(()=>t.className='toast',2600);
+}
+
+async function api(path, body) {
+  const r = await fetch(path, body!==undefined
+    ? {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}
+    : {});
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error||'error');
+  return j;
+}
+
+const MODE_HINT = {
+  off: 'Automation is paused. Orders are not processed.',
+  stage: 'Each new order creates a ChitChats shipment and finds the cheapest rate. Tap "Buy & print" to spend money.',
+  auto: 'Each order buys the cheapest label automatically. The label is emailed and shown here. No approval needed.',
+};
+
+async function load() {
+  S = await api('/api/state');
+  renderMode(); renderEnv(); renderStats(); renderOrders(); fillSettings(); renderPackages(); renderPoll(); renderPush();
+  $('hookUrl').textContent = location.origin + '/webhook/woo';
+}
+
+// ---- Mode ----
+function renderMode() {
+  const m = S.settings.mode || 'stage';
+  document.querySelectorAll('#modebar button').forEach(b => {
+    b.className = b.dataset.mode === m ? 'on ' + m : '';
+  });
+  $('modeHint').textContent = MODE_HINT[m] || '';
+}
+document.querySelectorAll('#modebar button').forEach(b => b.onclick = async () => {
+  await api('/api/mode', { mode: b.dataset.mode });
+  S.settings.mode = b.dataset.mode;
+  renderMode();
+  toast('Mode: ' + b.dataset.mode);
+});
+
+function renderEnv() {
+  const e = S.settings.environment;
+  const mock = e === 'mock' || !(S.settings.chitchats && S.settings.chitchats.clientId);
+  const b = $('envBadge');
+  b.textContent = mock ? 'MOCK' : e === 'live' ? 'LIVE' : 'STAGING';
+  b.className = 'badge ' + (mock ? 'mock' : e === 'live' ? 'live' : 'staging');
+}
+
+// ---- Stats ----
+function renderStats() {
+  const o = S.orders;
+  const c = s => o.filter(x => x.status === s).length;
+  [['Total', o.length], ['Awaiting', c('staged')], ['Labels ready', o.filter(x=>x.status==='label_ready'||x.status==='delivered').length], ['Failed', c('failed')]]
+    .forEach(([l, n], i) => {
+      $('stats').children[i] && ($('stats').children[i].querySelector('.n').textContent = n);
+    });
+}
+
+// ---- Orders ----
+function renderOrders() {
+  $('stats').innerHTML = [['Total', S.orders.length], ['Awaiting', S.orders.filter(x=>x.status==='staged').length], ['Labels ready', S.orders.filter(x=>x.status==='label_ready'||x.status==='delivered').length], ['Failed', S.orders.filter(x=>x.status==='failed').length]]
+    .map(([l,n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+
+  if (!S.orders.length) {
+    $('orders').innerHTML = '<div class="empty">No orders yet. Tap "Simulate order" to test the full pipeline.</div>';
+    return;
+  }
+  $('orders').innerHTML = S.orders.map(o => {
+    const st = o.status || 'received';
+    const rate = o.chosenRate ? `${o.chosenRate.payment_amount} ${(o.chosenRate.payment_currency||'cad').toUpperCase()}` : '';
+    return `<div class="order">
+      <div class="row">
+        <h4>#${o.number} <span class="pill s-${st}">${st.replace(/_/g,' ')}</span></h4>
+        <div class="grow"></div>
+        ${o.cost ? `<span class="meta" style="margin:0">${o.cost}</span>` : rate ? `<span class="meta" style="margin:0">~${rate}</span>` : ''}
+      </div>
+      <div class="meta">
+        ${o.order?.shipping?.name||''} &middot; ${o.order?.shipping?.city||''} ${o.order?.shipping?.province_code||''} ${o.order?.shipping?.postal_code||''}<br>
+        ${o.pkg ? `${o.pkg.summary} &rarr; <b>${o.pkg.boxName}</b> ${o.pkg.weight}g (${o.pkg.size_x}&times;${o.pkg.size_y}&times;${o.pkg.size_z}cm)` : ''}
+        ${o.tracking ? `<br>Tracking: ${o.tracking}` : ''}
+      </div>
+      <div class="row" style="margin-top:10px">
+        ${st==='staged' ? `<button class="btn amber" onclick="buy('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 01-8 0"/></svg>Buy &amp; print ${rate?'('+rate+')':''}</button>` : ''}
+        ${o.labelFile ? `<a class="btn ghost" href="/label/${o.labelFile}" target="_blank"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>View label</a>` : ''}
+        ${o.labelFile ? `<button class="btn ghost" onclick="redeliver('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>Re-send</button>` : ''}
+        <button class="btn ghost" onclick="this.closest('.order').querySelector('.events').classList.toggle('open')"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Log</button>
+      </div>
+      <div class="events">${[...(o.events||[])].reverse().map(e=>`<div>${new Date(e.at).toLocaleString()} &ndash; ${e.message}</div>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+async function simulate() {
+  try { toast('Simulating...'); await api('/api/simulate', {}); await load(); toast('Order simulated'); }
+  catch(e) { toast(e.message, 1); }
+}
+async function buy(id) {
+  if (!confirm('Buy postage for order ' + id + '? This spends money in Live mode.')) return;
+  try { toast('Buying...'); await api('/api/order/' + id + '/buy', {}); await load(); toast('Bought and delivered'); }
+  catch(e) { toast(e.message, 1); }
+}
+async function redeliver(id) {
+  try { await api('/api/order/' + id + '/redeliver', {}); toast('Re-sent'); }
+  catch(e) { toast(e.message, 1); }
+}
+
+// ---- Poll bar ----
+function renderPoll() {
+  const p = S.poll || {};
+  const hour = (S.settings.poller && S.settings.poller.hour != null) ? S.settings.poller.hour : 9;
+  $('pollHour').value = hour;
+  const last = p.last;
+  if (p.running) {
+    $('pollInfo').innerHTML = '<strong>Checking for new orders...</strong>';
+    $('pollBtn').disabled = true;
+  } else if (last) {
+    const ago = Math.round((Date.now() - new Date(last.at)) / 60000);
+    $('pollInfo').innerHTML = last.error
+      ? `<strong>Last poll failed:</strong> ${last.error} (${ago}m ago)`
+      : `<strong>Last check:</strong> ${last.processed} new orders${last.errors ? ', '+last.errors+' errors' : ''} &mdash; ${ago < 60 ? ago+'m' : Math.round(ago/60)+'h'} ago`;
+    $('pollBtn').disabled = false;
+  } else {
+    $('pollInfo').innerHTML = 'No check yet. Server polls daily at <strong>' + hour + ':00</strong>';
+    $('pollBtn').disabled = false;
+  }
+}
+
+async function pollNow() {
+  $('pollBtn').disabled = true;
+  $('pollInfo').innerHTML = '<strong>Checking WooCommerce...</strong>';
+  try {
+    const r = await api('/api/poll', {});
+    await load();
+    toast(r.result.processed + ' new orders found');
+  } catch(e) {
+    toast(e.message, 1);
+    $('pollBtn').disabled = false;
+  }
+}
+
+async function savePollHour() {
+  const h = parseInt($('pollHour').value);
+  if (isNaN(h) || h < 0 || h > 23) return;
+  try {
+    await api('/api/settings', { poller: { hour: h } });
+    toast('Poll time saved: daily at ' + h + ':00');
+  } catch(e) { toast(e.message, 1); }
+}
+
+// ---- Tabs ----
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x===b));
+  ['orders','packages','settings'].forEach(t => $('tab-'+t).style.display = t===b.dataset.tab ? '' : 'none');
+});
+
+// ---- Push notifications ----
+let _pushSub = null;
+
+async function renderPush() {
+  const pb = $('pushBtn'), pi = $('pushInfo');
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    pi.textContent = 'Push notifications not supported in this browser. Add to home screen on iOS 16.4+ or Android Chrome.';
+    return;
+  }
+  pb.style.display = '';
+  const perm = Notification.permission;
+  if (perm === 'denied') {
+    pi.textContent = 'Notifications blocked. Allow in browser settings.';
+    pb.style.display = 'none';
+    return;
+  }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    _pushSub = await reg.pushManager.getSubscription();
+    if (_pushSub) {
+      pi.innerHTML = `<strong>Push enabled</strong> &mdash; ${S.subscriptions} device${S.subscriptions!==1?'s':''} subscribed`;
+      pb.textContent = 'Disable notifications';
+      pb.className = 'btn red';
+    } else {
+      pi.innerHTML = 'Get a push notification each time orders are checked.';
+      pb.textContent = 'Enable notifications';
+      pb.className = 'btn primary';
+    }
+  } catch(e) {
+    pi.textContent = 'Could not check subscription: ' + e.message;
+  }
+}
+
+async function togglePush() {
+  if (_pushSub) {
+    await _pushSub.unsubscribe();
+    await api('/api/unsubscribe', { endpoint: _pushSub.endpoint });
+    _pushSub = null;
+    toast('Notifications disabled');
+    await renderPush();
+  } else {
+    await subscribePush();
+  }
+}
+
+async function subscribePush() {
+  try {
+    const { publicKey } = await api('/api/vapid-key');
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(publicKey),
+    });
+    await api('/api/subscribe', sub.toJSON());
+    _pushSub = sub;
+    toast('Notifications enabled');
+    await renderPush();
+  } catch(e) {
+    toast('Could not enable notifications: ' + e.message, 1);
+  }
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const pad = base64String.length % 4;
+  const padded = base64String + '==='.slice(0, pad ? 4 - pad : 0);
+  const raw = atob(padded.replace(/-/g,'+').replace(/_/g,'/'));
+  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+}
+
+// ---- Settings ----
+function fillSettings() {
+  const s = S.settings;
+  $('cc_client').value = s.chitchats?.clientId || ''; $('cc_token').value = '';
+  $('cc_env').value = s.environment || 'mock';
+  $('wc_url').value = s.woo?.url || ''; $('wc_key').value = ''; $('wc_secret').value = ''; $('wc_hook').value = '';
+  const r = s.returnAddress || {};
+  $('ra_name').value=r.name||''; $('ra_a1').value=r.address_1||''; $('ra_city').value=r.city||''; $('ra_prov').value=r.province_code||''; $('ra_post').value=r.postal_code||'';
+  const d = s.delivery || {};
+  setSw('dl_brevo', d.brevo?.enabled); $('br_key').value=''; $('br_to').value=d.brevo?.to||''; $('br_from').value=d.brevo?.from||''; $('br_name').value=d.brevo?.fromName||'';
+  setSw('dl_gmail', d.gmail?.enabled); $('gm_user').value=d.gmail?.user||''; $('gm_pass').value=''; $('gm_to').value=d.gmail?.to||'';
+  setSw('dl_print', d.print?.enabled); $('pr_printer').value=d.print?.printer||''; $('pr_media').value=d.print?.media||'';
+}
+
+const SW = {};
+function setSw(k, v) { SW[k]=!!v; $(k+'_sw').classList.toggle('on',!!v); $(k+'_box').style.opacity=v?1:.4; }
+function tog(k) { setSw(k, !SW[k]); }
+function val(id) { return $(id).value.trim(); }
+function maybe(id) { const v=val(id); return v||undefined; }
+function clean(o) { for(const k in o){if(o[k]===undefined)delete o[k];else if(o[k]&&typeof o[k]==='object')clean(o[k]);} }
+
+async function saveSettings() {
+  try {
+    const patch = {
+      environment: val('cc_env'),
+      chitchats: { clientId: val('cc_client'), accessToken: maybe('cc_token') },
+      woo: { url: val('wc_url'), consumerKey: maybe('wc_key'), consumerSecret: maybe('wc_secret'), webhookSecret: maybe('wc_hook') },
+      returnAddress: { name:val('ra_name'), address_1:val('ra_a1'), city:val('ra_city'), province_code:val('ra_prov'), postal_code:val('ra_post'), country_code:'CA' },
+      delivery: {
+        dashboard: true,
+        brevo: { enabled:SW.dl_brevo, apiKey:maybe('br_key'), to:val('br_to'), from:val('br_from'), fromName:val('br_name') },
+        gmail: { enabled:SW.dl_gmail, user:val('gm_user'), appPassword:maybe('gm_pass'), to:val('gm_to') },
+        print: { enabled:SW.dl_print, printer:val('pr_printer'), media:val('pr_media') },
+      },
+    };
+    clean(patch);
+    await api('/api/settings', patch); await load(); toast('Settings saved');
+  } catch(e) { toast(e.message, 1); }
+}
+
+// ---- Packages ----
+function renderPackages() {
+  const p = S.settings.packaging || {};
+  $('pk_default').value = p.defaultItemGrams; $('pk_tare').value = p.packagingTareGrams; $('pk_desc').value = p.description || '';
+  $('rules').innerHTML = (p.itemWeights||[]).map((r,i) => ruleRow(r,i)).join('');
+  $('boxes').innerHTML = (p.boxes||[]).map((b,i) => boxRow(b,i)).join('');
+}
+function ruleRow(r) {
+  return `<div class="rule">
+    <select class="r_field"><option value="name"${r.field==='name'?' selected':''}>name contains</option><option value="sku"${r.field==='sku'?' selected':''}>sku is</option></select>
+    <input class="r_match" value="${r.match||''}" placeholder="candle">
+    <input class="r_grams" type="number" value="${r.grams||''}" placeholder="g">
+    <button class="x" onclick="this.closest('.rule').remove()">&times;</button>
+  </div>`;
+}
+function boxRow(b) {
+  return `<div class="box">
+    <input class="b_name" value="${b.name||''}">
+    <input class="b_max" type="number" value="${b.maxQty||''}">
+    <input class="b_x" type="number" value="${b.size_x||''}">
+    <input class="b_y" type="number" value="${b.size_y||''}">
+    <input class="b_z" type="number" value="${b.size_z||''}">
+    <button class="x" onclick="this.closest('.box').remove()">&times;</button>
+  </div>`;
+}
+function addRule() { $('rules').insertAdjacentHTML('beforeend', ruleRow({field:'name'})); }
+function addBox() { $('boxes').insertAdjacentHTML('beforeend', boxRow({size_unit:'cm'})); }
+
+async function savePackages() {
+  try {
+    const itemWeights = [...document.querySelectorAll('#rules .rule')].map(d => ({
+      field: d.querySelector('.r_field').value,
+      match: d.querySelector('.r_match').value.trim(),
+      grams: Number(d.querySelector('.r_grams').value),
+    })).filter(r => r.match);
+    const boxes = [...document.querySelectorAll('#boxes .box')].map(d => ({
+      name: d.querySelector('.b_name').value.trim(),
+      maxQty: Number(d.querySelector('.b_max').value),
+      size_x: Number(d.querySelector('.b_x').value), size_y: Number(d.querySelector('.b_y').value), size_z: Number(d.querySelector('.b_z').value),
+      size_unit: 'cm', package_type: 'parcel',
+    })).filter(b => b.name);
+    const packaging = { defaultItemGrams:Number($('pk_default').value), packagingTareGrams:Number($('pk_tare').value), description:$('pk_desc').value.trim(), itemWeights, boxes };
+    await api('/api/settings', {packaging}); await load(); toast('Packaging saved');
+  } catch(e) { toast(e.message, 1); }
+}
+
+// ---- Service worker registration ----
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(e => console.warn('SW failed:', e));
+}
+
+load();
+</script>
+</body>
+</html>
