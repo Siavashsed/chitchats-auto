@@ -78,6 +78,7 @@
   .s-needs_box_size{background:#1f1400;color:var(--amber)}
   .s-refunded{background:#1a0a0a;color:#f87171}
   .s-new{background:#0c2040;color:#60c8ff;animation:blink 2s ease-in-out infinite}
+  .s-sim{background:#1a1a2e;color:#a78bfa;border:1px dashed #6d28d9}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
   .order-warn{border-color:var(--amber)!important}
   .refund-form{margin-top:10px;background:#160505;border:1px solid #7f1d1d;border-radius:10px;padding:12px}
@@ -414,6 +415,7 @@ function renderOrders() {
           Order #${o.number}
           <span class="pill s-${st}">${st.replace(/_/g,' ')}</span>
           ${o.isNew ? '<span class="pill s-new">New</span>' : ''}
+          ${o.isSimulated ? '<span class="pill s-sim">Simulated</span>' : ''}
         </h4>
         <div class="grow"></div>
         ${o.cost ? `<b style="color:var(--mint)">${o.cost}</b>` : rate ? `<span class="meta" style="margin:0">~${rate}</span>` : ''}
@@ -457,6 +459,7 @@ function renderOrders() {
         ${chitchatsUrl ? `<a class="btn ghost" href="${chitchatsUrl}" target="_blank"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>ChitChats</a>` : ''}
         ${o.labelFile ? `<button class="btn ghost" onclick="redeliver('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>Re-send</button>` : ''}
         ${st !== 'refunded' ? `<button class="btn ghost" style="color:#f87171" onclick="toggleRefund('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109 9"/><path d="M3 3v9h9"/><path d="M13 10l-4 4 4 4"/></svg>Refund</button>` : ''}
+        ${o.isSimulated ? `<button class="btn ghost" style="color:#6d28d9" onclick="deleteOrder('${o.orderId}')"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Delete</button>` : ''}
         <button class="btn ghost" onclick="this.closest('.order').querySelector('.events').classList.toggle('open')"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Log</button>
       </div>
 
@@ -502,6 +505,14 @@ async function buyWithBox(id) {
 async function redeliver(id) {
   try { await api('/api/order/' + id + '/redeliver', {}); toast('Re-sent'); }
   catch(e) { toast(e.message, 1); }
+}
+async function deleteOrder(id) {
+  if (!confirm('Delete this simulated order?')) return;
+  try {
+    await fetch('/api/order/' + id, { method: 'DELETE' });
+    await load();
+    toast('Deleted');
+  } catch(e) { toast(e.message, 1); }
 }
 function toggleRefund(id) {
   const el = document.getElementById('rf_' + id);

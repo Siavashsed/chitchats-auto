@@ -1,0 +1,95 @@
+[
+  {
+    "orderId": "SIM143285",
+    "number": "SIM143285",
+    "order": {
+      "orderId": "SIM143285",
+      "number": "SIM143285",
+      "status": "processing",
+      "createdAt": null,
+      "value": 79,
+      "currency": "cad",
+      "description": "Vish Body Candle",
+      "customerEmail": "sia@kavalsia.com",
+      "shipping": {
+        "name": "Test Buyer",
+        "address_1": "123 Queen St W",
+        "address_2": "Unit 4",
+        "city": "Toronto",
+        "province_code": "ON",
+        "postal_code": "M5H 2M9",
+        "country_code": "CA",
+        "phone": "6475107272",
+        "email": "sia@kavalsia.com"
+      },
+      "lineItems": [
+        {
+          "name": "Vish Body Candle",
+          "sku": "VISH",
+          "quantity": 2,
+          "price": 39.5
+        }
+      ],
+      "pkg": {
+        "boxName": "2 items stacked (24x21x22)",
+        "package_type": "parcel",
+        "weight": 1150,
+        "weight_unit": "g",
+        "size_unit": "cm",
+        "size_x": 24,
+        "size_y": 21,
+        "size_z": 22,
+        "description": "Scented candles (home decor)",
+        "totalQty": 2,
+        "summary": "2x Vish Body Candle",
+        "needsBoxSize": false
+      }
+    },
+    "pkg": {
+      "boxName": "2 items stacked (24x21x22)",
+      "package_type": "parcel",
+      "weight": 1150,
+      "weight_unit": "g",
+      "size_unit": "cm",
+      "size_x": 24,
+      "size_y": 21,
+      "size_z": 22,
+      "description": "Scented candles (home decor)",
+      "totalQty": 2,
+      "summary": "2x Vish Body Candle",
+      "needsBoxSize": false
+    },
+    "status": "staged",
+    "mode": "stage",
+    "events": [
+      {
+        "at": "2026-06-18T21:29:03.288Z",
+        "message": "Order received - 2x Vish Body Candle -> 2 items stacked (24x21x22) (1150g)"
+      },
+      {
+        "at": "2026-06-18T21:29:03.290Z",
+        "message": "[MOCK] Shipment staged, cheapest 8.49 cad"
+      }
+    ],
+    "createdAt": "2026-06-18T21:29:03.288Z",
+    "updatedAt": "2026-06-18T21:29:03.290Z",
+    "shipmentId": "MOCK-SIM143285",
+    "rates": [
+      {
+        "postage_type": "chit_chats_canada_tracked",
+        "payment_amount": "8.49",
+        "payment_currency": "cad"
+      },
+      {
+        "postage_type": "usps_first",
+        "payment_amount": "12.10",
+        "payment_currency": "cad"
+      }
+    ],
+    "chosenRate": {
+      "postage_type": "chit_chats_canada_tracked",
+      "payment_amount": "8.49",
+      "payment_currency": "cad"
+    }
+  }
+]

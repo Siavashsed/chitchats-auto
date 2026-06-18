@@ -279,7 +279,19 @@ const server = http.createServer(async (req, res) => {
         ],
       });
       const rec = await pipeline.intake(fake, store.getSettings());
-      return send(res, 200, { ok: true, order: rec });
+      store.upsertOrder({ orderId: fake.orderId, isSimulated: true });
+      return send(res, 200, { ok: true, order: store.getOrder(fake.orderId) });
+    }
+
+    // ---- API: delete a simulated order ----
+    if (req.method === 'DELETE' && pathname.match(/^\/api\/order\/[^/]+$/)) {
+      const id = pathname.split('/')[3];
+      const rec = store.getOrder(id);
+      if (!rec) return send(res, 404, { error: 'not found' });
+      if (!rec.isSimulated) return send(res, 403, { error: 'only simulated orders can be deleted' });
+      const list = store.getOrders().filter(o => String(o.orderId) !== String(id));
+      store.saveOrders(list);
+      return send(res, 200, { ok: true });
     }
 
     // ---- Serve label files ----
